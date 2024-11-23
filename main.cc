@@ -1,9 +1,10 @@
 #include "gameController.h"
 
-int main()
-{
+int main(int argc, char const *argv[]) {
+
+    
     gameController game = gameController();
-    game.start();
+    game.run();
     return 0;
 
 }
