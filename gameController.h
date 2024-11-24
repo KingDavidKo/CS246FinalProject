@@ -10,7 +10,7 @@ class gameController {
         Player playerOne;
         Player playerTwo;
         int level;
-        map <string, string> decipherCommand;
+        map <string, string> command;
         bool textOnly;
         int seed;
         string file1;
@@ -19,6 +19,7 @@ class gameController {
 
     public:
         gameController(int level = 0, bool textOnly = false, int seed = -1, string file1 = "sequence1.txt", string file2 = "sequence2.txt");
+        string decipherCommand(string toInterpret);
         void renameCommand(string og, string curr);
         void run();
 };

@@ -1,14 +1,13 @@
 #include "gameController.h"
 #include "player.h"
 #include <iostream>
+#include <istringstream>
+#include <ifstream>
 #include <string>
 #include <cstdlib>
 using namespace std;
 
 gameController::gameController(int level, bool textOnly, int seed, string file1, string file2) {
-
-    
-
     // Arguments
     level = level;
     textOnly = textOnly;
@@ -16,34 +15,36 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
     file2 = file2;
     playerOne = Player(level);
     playerTwo = Player(level);
+    fileInput = false;
     
     if (seed >= 0) {
         srand(seed);
     }
 
     // Commands
-    decipherCommand["left"] = "left";
-    decipherCommand["right"] = "right";
-    decipherCommand["down"] = "down";
-    decipherCommand["clockwise"] = "clockwise";
-    decipherCommand["counterclockwise"] = "counterclockwise";
-    decipherCommand["drop"] = "drop";
-    decipherCommand["levelup"] = "levelup";
-    decipherCommand["leveldown"] = "leveldown";
-    decipherCommand["norandom file"] = "norandom file";
-    decipherCommand["random"] = "random";
-    decipherCommand["sequence file"] = "sequence file";
-    decipherCommand["I"] = "I";
-    decipherCommand["J"] = "J";
-    decipherCommand["L"] = "L";
-    decipherCommand["O"] = "O";
-    decipherCommand["S"] = "S";
-    decipherCommand["Z"] = "Z";
-    decipherCommand["T"] = "T";
-    decipherCommand["restart"] = "T";
-    decipherCommand["blind"] = "blind";
-    decipherCommand["heavy"] = "heavy";
-    decipherCommand["force"] = "force";
+    command["left"] = "left";
+    command["right"] = "right";
+    command["down"] = "down";
+    command["clockwise"] = "clockwise";
+    command["counterclockwise"] = "counterclockwise";
+    command["drop"] = "drop";
+    command["levelup"] = "levelup";
+    command["leveldown"] = "leveldown";
+    command["norandom"] = "norandom"; // the next word we take in will be a filename
+    command["random"] = "random";
+    command["sequence"] = "sequence";
+    command["I"] = "I";
+    command["J"] = "J";
+    command["L"] = "L";
+    command["O"] = "O";
+    command["S"] = "S";
+    command["Z"] = "Z";
+    command["T"] = "T";
+    command["restart"] = "restart";
+    command["blind"] = "blind";
+    command["heavy"] = "heavy";
+    command["force"] = "force";
+    command["rename"] = "rename";
 
 }
 
@@ -72,11 +73,69 @@ void gameController::run() {
     //         break;
 }
 
+string gameController::decipherCommand(string toInterpret) {
+    istringstream input{toInterpret};
+    istringstream checkNum{toInterpret};
+    int multiplier = -1;
+    if (checkNum >> multiplier) {
+        input = checkNum;
+    }
+    string potentialCommand;
+    input >> potentialCommand;
+    string result = commandMatch(input);
+    // maybe return result right here
+    if (result == "restart" || result == "ambiguous" || result == "invalid" || result == "sequence") {
+        return result; // wait if we restart the game all keybinds would be gone? 
+        // ok lowk this has to be in main. we have to open a file if we're in sequence. cannot handle it here
+    }
+    else if (result == "hint") {
+
+    }
+    else if (result == "norandom" || result == "random") {
+        if (currPlayer->level < 3) {
+            break;
+        }
+        if (result == "norandom") {
+            string seqFile;
+            cin >> seqFile; // dont know if we're reading from a file...
+        }
+        else {
+            seqFile = "";
+        }
+        currPlayer->level->setFile(seqFile);
+        
+        // pass level seqFile. level knows that if seqFile isn't an empty string then it has to use norandom from now on. otherwise it resets
+    }
+    else if (isABlock(result)) {
+        currPlayer->currBlock = Block(result); // have to make sure that copy assignment of blocks deletes the old one or smth that works with unique pointers
+    }
+    else if (result == "blind") {
+        opponent=>grid->blind;
+    }
+    else if (result == "heavy") {
+        // apply heavy modifier here
+    }
+    else if (result == "force") {
+        string block;
+        cin >> block;
+        if (isABlock(block)) {
+            opponent->currBlock(block);
+            if (opponent->lost()) {
+                return "WON";
+            }
+        }
+    }
+    else {
+        matchMultiplied(result, multiplier); // handles all multiplied stuff
+        return ""; // placeholder ig, when we move it all to main it should be fine
+    }
+}
+
 string gameController::commandMatch(const string &input) {
     string matchedCommand;
     int matchCount = 0;
 
-    for (auto &command : this->decipherCommand) {
+    for (auto &command : this->command) {
         if (input.length() > command.first.length()) {
             continue;
         }
@@ -92,8 +151,8 @@ string gameController::commandMatch(const string &input) {
     if (matchCount == 1) {
         return matchedCommand; // Unique match found
     } else if (matchCount > 1) {
-        return "AMBIGUOUS"; // Too many matches
+        return "ambiguous"; // Too many matches
     } else {
-        return "INVALID"; // No match
+        return "invalid"; // No match
     }
 }
