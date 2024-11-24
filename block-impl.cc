@@ -128,4 +128,8 @@ void Block::rotateCCW(){
 
 }
 
+vector<Cell*> &Block::getCells() {
+	return children;
+}
+
 #endif

@@ -22,8 +22,9 @@ class Block {
 
 
     public:
-        Block(Grid *g, int x, int y); // Set anchor point
+        Block(Grid *g, int x = 0, int y = 0); // Set anchor point
 			     // don't need defaults as this should never be called
+                 // I want to as an empty block for grid's currentBlock (default constructor)
         void move(string dir);
         void rotateCW();
         void rotateCCW();
@@ -35,7 +36,7 @@ class Block {
 	int getYAnchor();
 	int numCells(); // size of children Cell vector
 			// if 0, this Block should be deleted
-	vector<Cell*> getCells(); // get the  cells from this Block (useful for Grid)
+	vector<Cell*> &getCells(); // get the  cells from this Block (useful for Grid)
 	void setXAnchor(int x);
 	void setYAnchor(int y);
 	
