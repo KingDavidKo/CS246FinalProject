@@ -3,13 +3,11 @@
 #include <vector>
 
 Grid::Grid() {
-    rows = 15;
+    rows = 18; // 15 available + 3 reserved
     columns = 11;
     for (int i = 0; i < rows; i++) {
-        vector<Cell> newRow;
-        for (int j = 0; j < rows; j++) {
-            newRow.emplace_back(make_shared<Cell>(i,j));
+        for (int j = 0; j < columns; j++) {
+		unique_ptr<Cell>{}; // empty unique pointer		
         }
-        cells.emplace_back(newRow);
     }
 }
