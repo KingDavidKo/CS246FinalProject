@@ -22,11 +22,11 @@ class Block {
 
 
     public:
-        Block(int x, int y, Grid *g); // Set anchor point
+        Block(Grid *g, int x, int y); // Set anchor point
 			     // don't need defaults as this should never be called
         void move(string dir);
         void rotateCW();
-        void CCW();
+        void rotateCCW();
 	~Block(); // this can be implemented, idk what method to make virtual for this abtract class
 	
 	void removeCell(Cell &c);	
@@ -49,37 +49,37 @@ class Block {
 // default y is 3 cause the default grid anchor is just the internal coords
 class IBlock : public Block {
     public:
-        IBlock(int x = 0, int y = 3, Grid *g);    
+        IBlock(Grid *g, int x = 0, int y = 3);    
 };
 
 class JBlock : public Block {
     public:
-        JBlock(int x = 0, int y =  3, Grid *g);    
+        JBlock(Grid *g, int x = 0, int y = 3);    
 };
 
 class LBlock : public Block {
     public:
-        LBlock(int x = 0, int y = 3, Grid *g);    
+        LBlock(Grid *g, int x = 0, int y = 3);    
 };
 
 class OBlock : public Block {
     public:
-        OBlock(int x = 0, int y = 3, Grid *g);    
+        OBlock(Grid *g, int x = 0, int y = 3);    
 };
 
 class SBlock : public Block {
     public:
-        SBlock(int x = 0, int y = 3, Grid *g);    
+        SBlock(Grid *g, int x = 0, int y = 3);    
 };
 
 class TBlock : public Block {
     public:
-        TBlock(int x = 0, int y = 3, Grid *g);    
+        TBlock(Grid *g, int x = 0, int y = 3);    
 };
 
 class ZBlock : public Block {
     public:
-        ZBlock(int x = 0, int y = 3, Grid *g);    
+        ZBlock(Grid *g, int x = 0, int y = 3);    
 };
 
 
@@ -87,6 +87,6 @@ class ZBlock : public Block {
 // maybe the one debuff?
 class SingleBlock : public Block {
     public:
-        SingleBlock(int x, int y);    
+        SingleBlock(Grid *g, int x, int y);    
 };
 

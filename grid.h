@@ -1,14 +1,17 @@
+#ifndef GRID_H
+#define GRID_H
+
 #include "block.h"
 #include <vector>
 #include "cell.h"
 using namespace std;
 
 class Grid {
-    protected:
+    public:
         Block currentBlock;
-	int current_x, current_y; // bottom left coords for currentBlock
+		int current_x, current_y; // bottom left coords for currentBlock
 	
-	<unique_ptr<Cell>> cells[11][18]; // only Grid deletes Cells, never Block
+		unique_ptr<Cell> cells[11][18]; // only Grid deletes Cells, never Block
 					  // therefore unique_ptr
 	// this also means that in addBlock, we get the array's vector of Cell pointers,
 	// then set the index corresponding to the Cell's grid coords to the points for that cell
@@ -24,7 +27,7 @@ class Grid {
 				      // raw pointer because Cell will delete Block,
 				      // so Grid doesn't need to
 				      // the grid dtor should destruct every cell in thegrid to ensure that this happens
-        int rows, columns;
+        
 	int score;
 	int level;
 	
@@ -34,11 +37,14 @@ class Grid {
     void clearFullRows();
     
     public:
+		int rows, columns;
         Grid();
-        void addBlock(Block& block); // adds block to top left, updating the grid coords for that block and the cells in that block
+        void addBlock(Block block); // adds block to top left, updating the grid coords for that block and the cells in that block
         void dropBlock();
         bool isGameOver();
         bool returnState();
 
 	void setCurrent(Block& b); // set current block
 };
+
+#endif

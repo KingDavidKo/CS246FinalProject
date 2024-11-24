@@ -2,6 +2,7 @@
 #include "player.h"
 #include <iostream>
 #include <string>
+#include <cstdlib>
 using namespace std;
 
 gameController::gameController(int level, bool textOnly, int seed, string file1, string file2) {
@@ -11,12 +12,14 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
     // Arguments
     level = level;
     textOnly = textOnly;
-    seed = seed;
     file1 = file1;
     file2 = file2;
     playerOne = Player(level);
     playerTwo = Player(level);
     
+    if (seed >= 0) {
+        srand(seed);
+    }
 
     // Commands
     decipherCommand["left"] = "left";

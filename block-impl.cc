@@ -1,4 +1,5 @@
-
+#ifndef BLOCK_H
+#define BLOCK_H
 #include <string>
 #include <vector>
 #include "cell.h"
@@ -8,12 +9,12 @@
 using namespace std;
 
 
-Block::Block(int x, int y, Grid *g): x_anchor {x}, y_anchor {y}, g {g} {
+Block::Block(Grid *g, int x, int y): x_anchor {x}, y_anchor {y}, g {g} {
 	lifetimeCount = 0;
 	// rest of fields don't need to be added cause Block should be abstract	
 }
 
-IBlock::IBlock(int x, int y, Grid *g): Block{x, y, g} {
+IBlock::IBlock(Grid *g, int x, int y): Block{g, x, y} {
 	// inititalize the children cell vector
 	children.push_back(new Cell(0, 3, this));
 	children.push_back(new Cell(1, 3, this));
@@ -22,65 +23,65 @@ IBlock::IBlock(int x, int y, Grid *g): Block{x, y, g} {
 
 
 	// add the letter
-	letter= "I";
+	letter= 'I';
 }
 
 
 
-JBlock::JBlock(int x, int y, Grid *g): Block{x, y, g} {
+JBlock::JBlock(Grid *g, int x, int y): Block{g, x, y} {
 
 	children.push_back(new Cell(0, 2, this));
 	children.push_back(new Cell(0, 3, this));
 	children.push_back(new Cell(1, 3, this));
 	children.push_back(new Cell(2, 3, this));
 	
-	letter = "J";
+	letter = 'J';
 }
 
-LBlock::LBlock(int x, int y, Grid *g): Block{x, y, g} {
+LBlock::LBlock(Grid *g, int x, int y): Block{g, x, y} {
 
 	children.push_back(new Cell(0, 3, this));
 	children.push_back(new Cell(1, 3, this));
 	children.push_back(new Cell(2, 3, this));
 	children.push_back(new Cell(2, 2, this));
 
-	letter = "L";
+	letter = 'L';
 }
 
-OBlock::OBlock(int x, int y, Grid *g): Block {x, y, g} {
+OBlock::OBlock(Grid *g, int x, int y): Block {g, x, y} {
 	children.push_back(new Cell(0, 2, this));
 	children.push_back(new Cell(0, 3, this));
 	children.push_back(new Cell(1, 2, this));
 	children.push_back(new Cell(1, 3, this));
 
-	letter = "O";
+	letter = 'O';
 }
 
-SBlock::SBlock(int x, int y, Grid *g): Block{x, y, g} {
+SBlock::SBlock(Grid *g, int x, int y): Block{g, x, y} {
 
 	children.push_back(new Cell(0, 3, this));
 	children.push_back(new Cell(1, 3, this));
 	children.push_back(new Cell(1, 2, this));
 	children.push_back(new Cell(2, 2, this));
-	letter = "S";
+	letter = 'S';
 }
 
-TBlock::TBlock(int x, int y, Grid *g): Block {x, y, g} {
+TBlock::TBlock(Grid *g, int x, int y): Block {g, x, y} {
 
 	children.push_back(new Cell(0, 2, this));
 	children.push_back(new Cell(1, 2, this));
 	children.push_back(new Cell(1, 3, this));
 	children.push_back(new Cell(2, 2, this));
-	letter = "T";
+	letter = 'T';
 }
 
-ZBlock::ZBlock(int x, int y, Grid *g): Block {x, y, g} {
+ZBlock::ZBlock(Grid *g, int x, int y): Block {g, x, y} {
 
 	children.push_back(new Cell(0, 2, this));
 	children.push_back(new Cell(1, 2, this));
 	children.push_back(new Cell(1, 3, this));
 	children.push_back(new Cell(2, 3, this));
-	letter = "Z";
+	letter = 'Z';
 }
 
 // will implement later
@@ -88,7 +89,7 @@ ZBlock::ZBlock(int x, int y, Grid *g): Block {x, y, g} {
 
 
 
-void Block::RotateCW(){
+void Block::rotateCW(){
 	int numEmptyRowsBelow = 0; // = 3 - highest 'x' amongst the cells
 	
 	int highestY = 0;
@@ -108,7 +109,7 @@ void Block::RotateCW(){
 	}
 	
 }
-void Block::RotateCCW(){
+void Block::rotateCCW(){
 	int numEmptyColsLeft = 3; // # of empty columns to the left, = lowest 'x' amongst the cells
 	for (Cell *c :children){
 		if (c->getInternalX() < numEmptyColsLeft){
@@ -126,3 +127,5 @@ void Block::RotateCCW(){
 
 
 }
+
+#endif
