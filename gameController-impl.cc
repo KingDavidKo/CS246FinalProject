@@ -1,20 +1,19 @@
 #include "gameController.h"
 #include "player.h"
 #include <iostream>
-#include <istringstream>
-#include <ifstream>
+#include <sstream>
+#include <fstream>
 #include <string>
 #include <cstdlib>
 using namespace std;
 
-gameController::gameController(int level, bool textOnly, int seed, string file1, string file2) {
+gameController::gameController(int level, bool textOnly, int seed, string file1, string file2): playerOne {Player(level)}, playerTwo {Player(level)} {
     // Arguments
     level = level;
     textOnly = textOnly;
     file1 = file1;
     file2 = file2;
-    playerOne = Player(level);
-    playerTwo = Player(level);
+    currentPlayer = &playerOne;
     fileInput = false;
     
     if (seed >= 0) {
@@ -51,7 +50,10 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
 void gameController::run() {
     
     string command;
-
+    //currentPLayer = 1;
+    
+    
+    
     /*
     
     Potential problem for when renaming commands in map, keys are not able to be renamed
@@ -75,22 +77,24 @@ void gameController::run() {
 
 string gameController::decipherCommand(string toInterpret) {
     istringstream input{toInterpret};
-    istringstream checkNum{toInterpret};
+
     int multiplier = -1;
-    if (checkNum >> multiplier) {
-        input = checkNum;
+    if (!(input >> multiplier)) {
+        input.clear();
     }
+
+
     string potentialCommand;
     input >> potentialCommand;
-    string result = commandMatch(input);
+    string result = commandMatch(potentialCommand);
     // maybe return result right here
     if (result == "restart" || result == "ambiguous" || result == "invalid" || result == "sequence") {
         return result; // wait if we restart the game all keybinds would be gone? 
         // ok lowk this has to be in main. we have to open a file if we're in sequence. cannot handle it here
     }
-    else if (result == "hint") {
+    // else if (result == "hint") {
 
-    }
+    // }
     else if (result == "norandom" || result == "random") {
         if (currPlayer->level < 3) {
             break;

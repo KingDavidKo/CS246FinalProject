@@ -1,6 +1,11 @@
 #include "player.h"
 #include <map>
 #include <string>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
 using namespace std;
 
 class gameController {
@@ -15,6 +20,8 @@ class gameController {
         int seed;
         string file1;
         string file2;
+        Player * currentPlayer;
+        bool fileInput;
 
 
     public:
