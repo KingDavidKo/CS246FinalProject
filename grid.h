@@ -5,13 +5,16 @@
 #include <vector>
 #include <memory>
 #include "cell.h"
+#include "subject.h"
+#include "addtext.h"
+#include "addgraphics.h"
 using namespace std;
 
 
 class Block;
 class Cell;
 
-class Grid {
+class Grid  : public Subject {
     
     Block* currentBlock;
     int current_x, current_y; // bottom left coords for currentBlock

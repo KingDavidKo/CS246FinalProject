@@ -1,10 +1,4 @@
 #include "gameController.h"
-#include "player.h"
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <string>
-#include <cstdlib>
 using namespace std;
 
 gameController::gameController(int level, bool textOnly, int seed, string file1, string file2): playerOne {Player(level)}, playerTwo {Player(level)} {
@@ -50,6 +44,8 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
 void gameController::run() {
     
     string command;
+  
+
     //currentPLayer = 1;
     
     
@@ -73,6 +69,32 @@ void gameController::run() {
     //         sets[lhs] = new IntSet;
     //         cin >> *sets[lhs];
     //         break;
+}
+
+
+void gameController::render() {
+    cout << "Level:\t" << playerOne.level << "\t" << "Level:\t" << playerTwo.level << endl;
+    cout << "Score:\t" << playerOne.score << "\t" << "Score:\t" << playerTwo.score << endl;
+    
+    for (int i = 0; i < 18; i++) {
+        playerOne.grid.get()->notifyObservers(i);
+        cout << "\t";
+        playerTwo.grid.get()->notifyObservers(i);
+        cout << endl;
+    }
+    cout << "-----------\t-----------" << endl;
+    cout << "Next:      \tNext:      " << endl;
+
+    ///////
+    // Print next block here
+    ///////
+
+    if (!textOnly) {
+        ///////
+        // Do graphical here
+        ///////
+        return;
+    }
 }
 
 string gameController::decipherCommand(string toInterpret) {

@@ -1,3 +1,6 @@
+#ifndef GAMECONTROLLER_H
+#define GGAMECONTROLLER_H
+
 #include "player.h"
 #include <map>
 #include <string>
@@ -29,4 +32,7 @@ class gameController {
         string decipherCommand(string toInterpret);
         void renameCommand(string og, string curr);
         void run();
+        void render();
 };
+
+#endif
