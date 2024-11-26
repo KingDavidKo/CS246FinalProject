@@ -8,6 +8,9 @@
 
 using namespace std;
 
+class Block;
+class Grid;
+
 class Cell {
     protected:
         int x,y; // block-relative coordinates
@@ -23,12 +26,11 @@ class Cell {
         
 	//void setParent(unique_ptr<Block> b);
 	
-       	void updateGridCoords(); // gets the grid coords from parent and adjusts its own x_grid and y_grid accordingly
 	void swapCoords();
         void reverseRows();
         void reverseCols();
 	
-	void updateGridCoords(); //after changes have been made to the internal coords via rotation, this gets called
+	void updateGridCoords(); //after changes have been made to the internal coords via rotation or translation, this gets called
 
 	void translateInternalX(int dx);
 	void translateInternalY(int dy);
@@ -37,6 +39,8 @@ class Cell {
 	void translateGridY(int dy);
 
 	~Cell();
+	
+	void setInternalCoords(int newx, int newy);
 
 	int getInternalX();
 	int getInternalY();
@@ -44,6 +48,7 @@ class Cell {
 	int getGridX();
 	int getGridY();
 
+	char getLetter();
 };
 
 #endif

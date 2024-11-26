@@ -1,9 +1,18 @@
+#ifndef BLOCK_H
+#define BLOCK_H
+
+
 #include <string>
 #include <vector>
 #include "cell.h"
 #include "grid.h"
-#include <memory.h>
+#include <memory>
+#include <utility>
+
 using namespace std;
+
+class Cell;
+class Grid;
 
 class Block {
     protected: // block doesn't have children so maybe just make private
@@ -20,27 +29,42 @@ class Block {
 	int x_anchor, y_anchor; // anchor coords on Grid (bottom left 'box')
 	char letter;
 
+	int levelOfBirth; // level in which it was born
+	bool blockDied;
 
     public:
-        Block(Grid *g, int x = 0, int y = 0); // Set anchor point
+        Block(Grid *g, int x = 0, int y = 0, int levelOfBirth = 0); // Set anchor point
 			     // don't need defaults as this should never be called
                  // I want to as an empty block for grid's currentBlock (default constructor)
         void move(string dir);
         void rotateCW();
         void rotateCCW();
-	~Block(); // this can be implemented, idk what method to make virtual for this abtract class
+	virtual ~Block(); // this can be implemented, idk what method to make virtual for this abtract class
 	
-	void removeCell(Cell &c);	
+	void resetState(const std::vector<std::pair<int, int>>& originalCoords, int originalAnchorX, int originalAnchorY);
+
+	void removeCell(Cell* c);	
 	// accessors and mutators
 	int getXAnchor();
 	int getYAnchor();
 	int numCells(); // size of children Cell vector
 			// if 0, this Block should be deleted
-	vector<Cell*> &getCells(); // get the  cells from this Block (useful for Grid)
+	
+	
+	vector<Cell*> getCells(); // get the  cells from this Block (useful for Grid)
 	void setXAnchor(int x);
 	void setYAnchor(int y);
+	void setAnchors(int newxanch, int newyanch);
+
+	void setBirthDate(int birthDate);
+
+	void setBlockDied(bool didTheyDie);
+	// update cell grid coords	
+	void updateCellCoords();	
 	
-	char getLetter();
+	
+	virtual char getLetter() = 0; // this is what makes Block an abstract class
+
 
 };
 
@@ -50,37 +74,51 @@ class Block {
 // default y is 3 cause the default grid anchor is just the internal coords
 class IBlock : public Block {
     public:
-        IBlock(Grid *g, int x = 0, int y = 3);    
+        IBlock(Grid *g, int x = 0, int y = 3, int levelOfBirth = 0);
+	char getLetter() override;    	
+	~IBlock();
 };
 
 class JBlock : public Block {
     public:
-        JBlock(Grid *g, int x = 0, int y = 3);    
+        JBlock(Grid *g, int x = 0, int y = 3, int levelOfBirth = 0);   
+	char getLetter() override;
+	~JBlock();
 };
 
 class LBlock : public Block {
     public:
-        LBlock(Grid *g, int x = 0, int y = 3);    
+        LBlock(Grid *g, int x = 0, int y = 3, int levelOfBirth = 0);
+	char getLetter() override;
+	~LBlock();
 };
 
 class OBlock : public Block {
     public:
-        OBlock(Grid *g, int x = 0, int y = 3);    
+        OBlock(Grid *g, int x = 0, int y = 3, int levelOfBirth = 0);    
+	char getLetter() override;
+	~OBlock();
 };
 
 class SBlock : public Block {
     public:
-        SBlock(Grid *g, int x = 0, int y = 3);    
+        SBlock(Grid *g, int x = 0, int y = 3, int levelOfBirth = 0);    
+	char getLetter() override;
+	~SBlock();
 };
 
 class TBlock : public Block {
     public:
-        TBlock(Grid *g, int x = 0, int y = 3);    
+        TBlock(Grid *g, int x = 0, int y = 3, int levelOfBirth = 0);    
+	char getLetter() override;
+	~TBlock();
 };
 
 class ZBlock : public Block {
     public:
-        ZBlock(Grid *g, int x = 0, int y = 3);    
+        ZBlock(Grid *g, int x = 0, int y = 3, int levelOfBirth = 0);    
+	char getLetter() override;
+	~ZBlock();
 };
 
 
@@ -91,3 +129,4 @@ class SingleBlock : public Block {
         SingleBlock(Grid *g, int x, int y);    
 };
 
+#endif

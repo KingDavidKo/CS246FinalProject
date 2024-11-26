@@ -16,14 +16,6 @@ Cell::Cell(int x, int y, Block* parent): x {x}, y {y}, parent {parent} {
 	// with the Block in the bottom left of that box (that's why there is 3 reserve rows)
 }
 
-void Cell::updateGridCoords(){
-	int n = parent->getYAnchor() -3;
-	y_grid += n;
-
-	int m = parent->getXAnchor();
-	x_grid -= m;
-} 
-
 
 void Cell::swapCoords(){
 	int temp = y;
@@ -40,37 +32,44 @@ void Cell::reverseCols(){
 }
 
 Cell::~Cell(){
-	parent->remove(this);
+	parent->removeCell(this);
 	
 	if (parent->numCells() == 0) delete parent;
-	// if the parent block has no more cells (like all have been cleared), then it should be deleted
-
+	// if the parent Block has no more cells (like all have been cleared), then it should be deleted
+	// otherwise, the parent Block should not be deleted
 }
 
 
-void translateInternalX(int dx){
+void Cell::translateInternalX(int dx){
 	x += dx;
 }
 
-void translateInternalY(int dy){
-	y += dy
+void Cell::translateInternalY(int dy){
+	y += dy;
 }
 
-void translateGridX(int dx){
+void Cell::translateGridX(int dx){
 	grid_x += dx;
 }
 
-void translateGridY(int dy){
-	grid_y += dy
+void Cell::translateGridY(int dy){
+	grid_y += dy;
 }
 
 
-// sets grid coords to internal coords, taking the anchor into account
-void updateGridCoords(){
+// sets grid coords to translated internal coords, taking the anchor into account
+void Cell::updateGridCoords(){
 	grid_x = parent->getXAnchor() + x;
 	grid_y = parent->getYAnchor() - 3 + y;
-
 }
+
+
+void Cell::setInternalCoords(int newx, int newy){
+	x = newx;
+	y = newy;
+}
+
+
 int Cell::getInternalX(){
 	return x;
 }
@@ -79,11 +78,15 @@ int Cell::getInternalY(){
 	return y;
 }
 
-int getGridX(){
+int Cell::getGridX(){
 	return grid_x;
 }
 
-int getGridY(){
+int Cell::getGridY(){
 	return grid_y;
+}
+
+char Cell::getLetter(){
+	return letter;
 }
 
