@@ -71,7 +71,7 @@ class Grid  : public Subject {
 	// accessors and mutators
 	int getLevel();
 	int getScore();
-
+	Block* returnCurrentBlock(); 
 	void addToScore(int s);
 	void setLevel(int newlevel);
 

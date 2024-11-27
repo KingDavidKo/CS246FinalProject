@@ -279,7 +279,9 @@ void Grid::clearFullRows(){
 
 
 // mutators and accessors
-
+Block* Grid::returnCurrentBlock() {
+		return currentBlock;
+}
 
 int Grid::getLevel() { return level; }
 

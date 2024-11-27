@@ -103,6 +103,9 @@ void gameController::matchMultiplied(string result, int multiplier) {
 void gameController::multipleCommmandHandler(string result) {
     if (result == "left") {
         // apply left
+        if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), -1, 0, false, false)) {
+            currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), -1, 0, false, false);
+        }
     }
     else if (result == "right") {
         // apply right
