@@ -12,3 +12,15 @@ Player::Player(int level): grid {make_shared<Grid>()} {
     heavy = false;
     force = false;
 }
+
+void Player::incrementLevel() {
+    if (level < maxlevel) {
+        level++;
+    }
+}
+
+void Player::decrementLevel() {
+    if (level > minlevel) {
+        level--;
+    }
+}

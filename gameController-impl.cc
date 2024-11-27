@@ -8,6 +8,7 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
     file1 = file1;
     file2 = file2;
     currentPlayer = &playerOne;
+    opponent = &playerTwo;
     vector<string> blocks = {"I", "J", "L", "O", "S", "Z", "T"};
     this->blocks = blocks;
 
@@ -109,33 +110,53 @@ void gameController::multipleCommmandHandler(string result) {
     }
     else if (result == "right") {
         // apply right
+        if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 1, 0, false, false)) {
+            currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 1, 0, false, false);
+        }
     }
     else if (result == "down") {
         // apply down
+        if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 0, 1, false, false)) {
+            currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 0, 1, false, false);
+        }
     }
     else if (result == "clockwise") {
         // apply clockwise
+        if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 0, 0, true, false)) {
+            currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 0, 0, true, false);
+        }
     }
     else if (result =="counterclockwise") {
         // apply counterclockwise
+        if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 0, 0, false, true)) {
+            currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 0, 0, false, true);
+        }
     }
     else if (result == "drop") {
         // apply drop logic. should be done in a way such that i can continuously call drop a ton of times and nothing happens
+        currentPlayer->grid->dropBlock();
+        Player * temp = currentPlayer;
+        currentPlayer = opponent;
+        opponent = temp;
     }
     else if (result == "levelup") {
         // apply levelup
+        currentPlayer->incrementLevel();
     }
     else if (result == "leveldown") {
         // apply leveldown  
+        currentPlayer->decrementLevel();
     }
     else {
         cout << "invalid command, try again!" << endl;
     }
+    // check if we need to switch to the other player regardless? or we could just force player to drop
+    render();
 }
 
 
 void gameController::render() {
-    cout << "Level:\t" << playerOne.level << "\t" << "Level:\t" << playerTwo.level << endl;
+    cout << "Level:\t" << playerOne.returnLevel() << "\t" << "Level:\t" << playerTwo.returnLevel() << endl;
     cout << "Score:\t" << playerOne.score << "\t" << "Score:\t" << playerTwo.score << endl;
     
     for (int i = 0; i < 18; i++) {
@@ -185,7 +206,17 @@ string gameController::fileParse(string fileName) {
         else if (result == "norandom") { // norandom
             string seqFile;
             in >> seqFile;
-            currPlayer->level->setFile(seqFile);
+            currentPlayer->level->setFile(seqFile); // set File does not exist at this moment!
+        }
+        else if (result == "force") {
+            string block;
+            in >> block;
+            if (isABlock(block)) { // reprompt maybe if it's not  a block
+                opponent->setCurrentBlock(block); 
+                if (opponent->lost()) {
+                    return "WON";
+                }
+            }
         }
         else {
             cerr << "FileParse error" << endl; // we should never get to this stage?
@@ -194,7 +225,7 @@ string gameController::fileParse(string fileName) {
     return "";
 } 
 
-string gameController::decipherCommand(string toInterpret, bool readingFromFile) {
+string gameController::decipherCommand(string toInterpret, bool readingFromFile) { // also maybe need a bool for special action triggers
     istringstream input{toInterpret};
     int multiplier = -1;
     if (!(input >> multiplier)) {
@@ -225,7 +256,7 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
 
     else if (result == "norandom" || result == "random") {
         string seqFile;
-        if (currPlayer->level < 3) {
+        if (currentPlayer->returnLevel() < 3) {
             return ""; // no need to do anything
         }
         if (result == "norandom") {
@@ -239,26 +270,31 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
         else {
             seqFile = ""; // result was random, so seqFile should be nothing!
         }
-        currPlayer->level->setFile(seqFile);
+        currentPlayer->level->setFile(seqFile); // i can't change the file from here...
         
         // pass level seqFile. level knows that if seqFile isn't an empty string then it has to use norandom from now on. otherwise it resets
     }
     else if (isABlock(result)) {
-        currPlayer->currBlock = Block(result); // have to make sure that copy assignment of blocks deletes the old one or smth that works with unique pointers
+        currentPlayer->grid->setCurrentBlock(Block()); // have to make sure that copy assignment of blocks deletes the old one or smth that works with unique pointers
     }
     else if (result == "blind") {
-        opponent=>grid->blind();
+        opponent->grid->blind();
     }
     else if (result == "heavy") {
         // apply heavy modifier here
     }
     else if (result == "force") {
-        string block;
-        cin >> block;
-        if (isABlock(block)) { // reprompt maybe if it's not  a block
-            opponent->currBlock(block); 
-            if (opponent->lost()) {
-                return "WON";
+        if (readingFromFile) {
+            return result;
+        }
+        else {
+            string block;
+            cin >> block;
+            if (isABlock(block)) { // reprompt maybe if it's not  a block
+                opponent->setCurrentBlock(block); 
+                if (opponent->lost()) {
+                    return "WON";
+                }
             }
         }
     }

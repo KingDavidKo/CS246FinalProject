@@ -5,13 +5,14 @@
 #include "addtext.h"
 
 class Player {
-        
+    int maxlevel = 4;
+    int minlevel = -1;
+    int level;
+
         
 
     public:
         int score;
-        
-        int level;
         bool blind;
         bool heavy;
         bool force;
@@ -19,6 +20,9 @@ class Player {
         shared_ptr<Grid> grid;
         shared_ptr<TextObserver> text;
         shared_ptr<GraphicsObserver> graphics;  
+        int returnLevel();
+        void incrementLevel();
+        void decrementLevel();
         //virtual ~AsciiArt();
         //virtual char charAt(int row, int col, int tick) = 0;
 };

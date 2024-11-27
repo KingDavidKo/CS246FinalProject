@@ -72,6 +72,7 @@ class Grid  : public Subject {
 	int getLevel();
 	int getScore();
 	Block* returnCurrentBlock(); 
+	void setCurrentBlock(Block* freshBlock);
 	void addToScore(int s);
 	void setLevel(int newlevel);
 

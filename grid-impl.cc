@@ -182,9 +182,9 @@ void Grid::moveBlock(Block* b, int dx, int dy, bool CW, bool CCW){
 }
 
 // drop some block (usually the current block but it can vary)
-void Grid::dropBlock(Block b*){
+void Grid::dropBlock(Block* b){
 	
-	while(isValidMove(b, 0, 1, false, false){ // moving one down
+	while(isValidMove(b, 0, 1, false, false)) { // moving one down
 		moveBlock(b, 0, 1, false, false); // if you can move the block down one, then move it down one
 			
 	}
@@ -281,6 +281,11 @@ void Grid::clearFullRows(){
 // mutators and accessors
 Block* Grid::returnCurrentBlock() {
 		return currentBlock;
+}
+
+void Grid::setCurrentBlock(Block * freshBlock) {
+	currentBlock = freshBlock;
+	return;
 }
 
 int Grid::getLevel() { return level; }

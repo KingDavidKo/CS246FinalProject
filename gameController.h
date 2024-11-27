@@ -30,8 +30,8 @@ class gameController {
         int seed;
         string file1;
         string file2;
-        Player * currentPlayer;
-
+        Player* currentPlayer;
+        Player* opponent;
     public:
         gameController(int level = 0, bool textOnly = false, int seed = -1, string file1 = "sequence1.txt", string file2 = "sequence2.txt");
         string decipherCommand(string toInterpret, bool readingFromFile = false);
