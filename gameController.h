@@ -1,7 +1,8 @@
 #ifndef GAMECONTROLLER_H
-#define GGAMECONTROLLER_H
+#define GAMECONTROLLER_H
 
 #include "player.h"
+#include <algorithm>
 #include <map>
 #include <string>
 #include <iostream>
@@ -9,6 +10,7 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>
+#include <vector>
 using namespace std;
 
 class gameController {
@@ -17,6 +19,7 @@ class gameController {
     void matchMultiplied(string result, int multiplier);
     string fileParse(string fileName);
     void multipleCommmandHandler(string result);
+    vector<string>blocks;
 
     protected:
         Player playerOne;
@@ -28,8 +31,6 @@ class gameController {
         string file1;
         string file2;
         Player * currentPlayer;
-        bool fileInput;
-
 
     public:
         gameController(int level = 0, bool textOnly = false, int seed = -1, string file1 = "sequence1.txt", string file2 = "sequence2.txt");
@@ -37,6 +38,7 @@ class gameController {
         void renameCommand(string og, string curr);
         void run();
         void render();
+        bool isABlock(string potentialBlock);
 };
 
 #endif

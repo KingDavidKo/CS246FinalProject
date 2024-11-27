@@ -8,8 +8,9 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
     file1 = file1;
     file2 = file2;
     currentPlayer = &playerOne;
-    fileInput = false;
-    
+    vector<string> blocks = {"I", "J", "L", "O", "S", "Z", "T"};
+    this->blocks = blocks;
+
     if (seed >= 0) {
         srand(seed);
     }
@@ -80,6 +81,12 @@ void gameController::run() {
     //         cin >> *sets[lhs];
     //         break;
 }
+
+bool gameController::isABlock(string potentialBlock) {
+    bool isInVecOfValidBlocks = std::find(blocks.begin(), blocks.end(), potentialBlock) != blocks.end();
+    return isInVecOfValidBlocks;
+}
+
 
 void gameController::matchMultiplied(string result, int multiplier) {
     if (multiplier == -1) {
@@ -189,6 +196,7 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
     int multiplier = -1;
     if (!(input >> multiplier)) {
         input.clear();
+        multiplier = -1;
     }
 
     string potentialCommand;
@@ -244,8 +252,8 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
     else if (result == "force") {
         string block;
         cin >> block;
-        if (isABlock(block)) {
-            opponent->currBlock(block);
+        if (isABlock(block)) { // reprompt maybe if it's not  a block
+            opponent->currBlock(block); 
             if (opponent->lost()) {
                 return "WON";
             }
@@ -258,27 +266,32 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
 }
 
 string gameController::commandMatch(const string &input) {
-    string matchedCommand;
-    int matchCount = 0;
+  string matchedCommand;
+  int matchCount = 0;
+  bool isAMatch = true;
 
-    for (auto &command : this->command) {
-        if (input.length() > command.first.length()) {
-            continue;
-        }
-        for (int i = 0; i < input.length(); i++) {
-            if (command.first[i] != input[i]) {
-                continue;
-            }
-        }
-        matchedCommand = command.second;
-        matchCount++;
-    } 
-
-    if (matchCount == 1) {
-        return matchedCommand; // Unique match found
-    } else if (matchCount > 1) {
-        return "ambiguous"; // Too many matches
-    } else {
-        return "invalid"; // No match
+  for (auto &command : this->command) {
+    if (input.length() > command.first.length()) {
+      continue;
     }
+    for (int i = 0; i < input.length(); i++) {
+      if (command.first[i] != input[i]) {
+        isAMatch = false;
+        break;
+      }
+    }
+    if (isAMatch) {
+      matchedCommand = command.second;
+      matchCount++;
+    }
+    isAMatch = true;
+  }
+
+  if (matchCount == 1) {
+    return matchedCommand; // Unique match found
+  } else if (matchCount > 1) {
+    return "ambiguous"; // Too many matches
+  } else {
+    return "invalid"; // No match
+  }
 }
