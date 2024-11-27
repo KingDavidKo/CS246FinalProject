@@ -1,10 +1,17 @@
 #ifndef ADDGRAPHICS_H
 #define ADDGRAPHICS_H
-#include "asciiart.h"
+
+//#include "asciiart.h"
+
+
 #include <iostream>
 #include "observer.h"
 #include "window.h"
-#include "studio.h"
+
+
+//#include "studio.h"
+
+class Grid;
 
 class GraphicsObserver : public Observer {
     int top, bottom, left, right;

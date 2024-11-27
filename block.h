@@ -26,7 +26,12 @@ class Block {
 		 // raw pointer as Block isn't freeing grid
 		 // need the pointer to update grid score + remove it from grid vector of blocks if needed
 	int lifetimeCount; // "age" of block
+	
 	int x_anchor, y_anchor; // anchor coords on Grid (bottom left 'box')
+				//
+	// your x_anchor is the leftmost/lowest 'x' value amongst the cells
+	// your y_anchor is the bottommost/highest 'y' value amongst the cells
+
 	char letter;
 
 	int levelOfBirth; // level in which it was born
@@ -57,13 +62,20 @@ class Block {
 	void setAnchors(int newxanch, int newyanch);
 
 	void setBirthDate(int birthDate);
-
+	void incrementAge();
 	void setBlockDied(bool didTheyDie);
-	// update cell grid coords	
-	void updateCellCoords();	
+
+	// update cell grid coords based on the anchor coords
+	void updateCellCoords();
+
+	
+	void updateAnchorY(); // sets anchor_y = highest 'y' value amongst the cells
+
 	
 	
-	virtual char getLetter() = 0; // this is what makes Block an abstract class
+	int getAge();
+
+	virtual char getLetter() = 0; // I made this virtual to avoid making the dtor virtual, turns out I had to anyways but this works fine
 
 
 };

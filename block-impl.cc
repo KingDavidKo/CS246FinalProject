@@ -212,6 +212,17 @@ Block::~Block(){
 
 }
 
+
+// sets the y_anchor to the highest 'y' value amongst the cells
+void updateAnchorY(){
+	for (Cell* cell : children){
+		if (y_anchor < cell->getGridY()){
+			y_anchor = cell->getGridY();
+		}	
+	}
+}
+
+
 vector<Cell*> Block::getCells() {
 	return children;
 }
@@ -233,4 +244,6 @@ void Block::setBlockDied(bool didTheyDie){
 
 int Block::numCells(){ return children.size(); }
 
+void Block::incrementAge(){ lifetimeCount++; }
 
+int Block::getAge() { return lifetimeCount; }

@@ -58,7 +58,7 @@ class Grid  : public Subject {
 
 	void dropBlock();
         bool isGameOver();
-        vector<char> returnState(int n);
+        vector<char> returnState(int n); // returns a row of chars representing the grid
 	
 	void setCurrent(Block& b); // set current block
 		
@@ -78,7 +78,7 @@ class Grid  : public Subject {
 	void setBlind(bool isBlind);
 	void setHeavy(bool isHeavy);
 
-
+	~Grid();
 };
 
 #endif

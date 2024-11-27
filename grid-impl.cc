@@ -45,10 +45,27 @@ void Grid::setCurrent(Block block) {
     blocksInGrid.emplace_back(currentBlock);	
 }
 
+
+void Grid::removeBlock(Block* block){
+	for (auto it = blocksInGrid.begin(); it != blocksInGrid.end()){
+		if (*it == block) v.erase(it);
+		else ++it;
+	}
+	// ok we could break after we erase the block from the grid but im not gonna do that just to be sure
+}
+
 bool Grid::isGameOver() {
 	return gameOver;
 }
 
+
+// in the destructor, we just need to set every block's isDied field to true so they don't increase the score a bunch when they inevitably get deleted
+Grid::~Grid(){
+	for (Block* block : blocksInGrid){
+		block->setBlockDied(true);		
+	}
+
+}
 
 vector<char> Grid::returnState(int n) {
 	vector<char> row {};
@@ -156,7 +173,9 @@ void Grid::moveBlock(Block* b, int dx, int dy, bool CW, bool CCW){
         int y = cell->getGridY();
 
 	// safely moving the cells from the old coords to the new coords
-	grid[y][x] = move(grid[originalGridCoords[i].second][originalGridCoords[i].first]);
+	grid[y][x] = std::move(grid[originalGridCoords[i].second][originalGridCoords[i].first]);
+     	
+	// I put the std:: here just as a reminder, we don't need it
      }
 
 
@@ -170,11 +189,11 @@ void Grid::dropBlock(Block b*){
 			
 	}
 	// go until you can't move it down any more
-	
+		
 
 
 	// check if any lines are cleared -- separate method
-	clearFullRows();	
+	clearFullRows();
 
 
 	// check if any blocks are dead,
@@ -183,18 +202,77 @@ void Grid::dropBlock(Block b*){
 	// seems tedious to implement, if its bonus then focus on core features
 	
 
-	// since we just dropped a block, turn off special actions)
+	// since we just dropped a block, turn off special actions if they were on
 	if (blind) blind = false;
 	if (heavy) heavy = false;
+
+
+	// THE CURRENT BLOCK SHOULD ALREADY BE IN THE BLOCKS VECTOR,
+	// SO WE CAN SAFELY SET THE CURRENTBLOCK PTR TO NULLPTR HERE
+	
+	currentBlock = nullptr; // we dropped the block -- it's no longer the current block
 }
 
 
 // checks for cleared rows, and moves the blocks down + increments the score appropriately if 
 // any rows are cleared
 void Grid::clearFullRows(){
+	int linesCleared = 0;
+	int rows = 18;
+	int cols = 11;
+
+	int rowsLeftToCheck = 4;
+
+	for (int y = rows - 1; y > rows - 1 - rowsLeftToCheck; --y){ // we check the bottom 4 rows, cause only 4 rows can be cleared a at a time max
+		
+		// each loop iteration checks if the bottom row is full or not
+		bool isFull = true;
+		for (x = 0; x < cols; ++x){
+			if(!cells[y][x]){
+				isFull = false;
+				break;
+			}
+		}
+		if (isFull) {
+
+			for (int x = 0; x < cols; x++){
+				cells[y][x].reset(); // releases ownership and deletes the Cell
+				// via our cell implementation, if one of cells cleared was the last cell of a block, then that block will be deleted and removed from the blocksInGrid vector
+			}
+
+			// now let's shift all of the other rows down as well
+			for (int moveY = y; moveY > 0; moveY--){
+				for(int x = 0; x < cols; ++x) {
+					cells[moveY][x] = std::move(cells[moveY - 1][x]); // move ownership of that cell down one row
+					if (cells[moveY][x]){
+						cells[moveY][x]->translateGridY(1); // moves the grid_y field down 1 row
+						// adjusts the grid_y coord of that cell
+					}
+				}	
+			
+			}
+			// we shouldn't need to release the top-most row here, as std::move should've already made the top row empty	
+
+			linesCleared++;
+				
+			y++; // we just cleared a line and moves the stuff down, we need to recheck that row to see if the row right above it (which has now been moved into the current row)
+
+		} // end of isFull case
+
+	
+	} // end of line clearing for loop
+	
+	// update the block anchors for each block	
+	for (Block* block : blocksInGrid){
+		block->updateAnchorY();	
+	}
+
+	// update the score
+	int addedpoints = (linesCleared + level) * (linesCleared + level); 
+	addToScore(addedpoints);	
 
 }
-
+	
 
 // idt we need this
 //void Grid::addBlock(Block& b) {}
