@@ -14,6 +14,10 @@ using namespace std;
 class gameController {
 
     string commandMatch(const string &input);
+    void matchMultiplied(string result, int multiplier);
+    string fileParse(string fileName);
+    void multipleCommmandHandler(string result);
+
     protected:
         Player playerOne;
         Player playerTwo;
@@ -29,7 +33,7 @@ class gameController {
 
     public:
         gameController(int level = 0, bool textOnly = false, int seed = -1, string file1 = "sequence1.txt", string file2 = "sequence2.txt");
-        string decipherCommand(string toInterpret);
+        string decipherCommand(string toInterpret, bool readingFromFile = false);
         void renameCommand(string og, string curr);
         void run();
         void render();

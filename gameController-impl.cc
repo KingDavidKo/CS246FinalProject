@@ -42,8 +42,18 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
 }
 
 void gameController::run() {
-    
+    // initialize all the stuff!
     string command;
+    while (cin >> command) {
+        string result = decipherCommand(command);
+        if (result == "restart") {
+            // destroy the boards and remake them!
+            // keeps the keybinds intact this way
+        }
+        else if (result == "ambiguous" || result == "invalid") {
+            cout << result << endl;
+        }
+    }
   
 
     //currentPLayer = 1;
@@ -69,6 +79,48 @@ void gameController::run() {
     //         sets[lhs] = new IntSet;
     //         cin >> *sets[lhs];
     //         break;
+}
+
+void gameController::matchMultiplied(string result, int multiplier) {
+    if (multiplier == -1) {
+        multipleCommmandHandler(result);
+    }
+    else {
+        for (int i = multiplier; i > 0; i--) {
+            multipleCommmandHandler(result);
+        }
+    }
+    // now notify
+}
+
+void gameController::multipleCommmandHandler(string result) {
+    if (result == "left") {
+        // apply left
+    }
+    else if (result == "right") {
+        // apply right
+    }
+    else if (result == "down") {
+        // apply down
+    }
+    else if (result == "clockwise") {
+        // apply clockwise
+    }
+    else if (result =="counterclockwise") {
+        // apply counterclockwise
+    }
+    else if (result == "drop") {
+        // apply drop logic. should be done in a way such that i can continuously call drop a ton of times and nothing happens
+    }
+    else if (result == "levelup") {
+        // apply levelup
+    }
+    else if (result == "leveldown") {
+        // apply leveldown  
+    }
+    else {
+        cout << "invalid command, try again!" << endl;
+    }
 }
 
 
@@ -97,36 +149,84 @@ void gameController::render() {
     }
 }
 
-string gameController::decipherCommand(string toInterpret) {
-    istringstream input{toInterpret};
+string gameController::fileParse(string fileName) {
+    ifstream in {fileName};
+    string s;
+    while (in >> s) {
+        string result;
+        result = decipherCommand(s, true);
+        if (result == "") {
+            continue;
+        }
+        else if (result == "ambiguous" || result == "invalid") {
+            cout << result << endl;
+        }
+        else if (result == "return") {
+            return result;
+        }
+        else if (result == "sequence") {
+            string temp;
+            in >> temp;
+            temp = fileParse(temp);
+            if (temp != "") {
+                return temp; // only thing that should be returning should really just be "restart"
+            }
+        }
+        else if (result == "norandom") { // norandom
+            string seqFile;
+            in >> seqFile;
+            currPlayer->level->setFile(seqFile);
+        }
+        else {
+            cerr << "FileParse error" << endl; // we should never get to this stage?
+        }
+    }
+    return "";
+} 
 
+string gameController::decipherCommand(string toInterpret, bool readingFromFile) {
+    istringstream input{toInterpret};
     int multiplier = -1;
     if (!(input >> multiplier)) {
         input.clear();
     }
 
-
     string potentialCommand;
     input >> potentialCommand;
     string result = commandMatch(potentialCommand);
     // maybe return result right here
-    if (result == "restart" || result == "ambiguous" || result == "invalid" || result == "sequence") {
+    if (result == "restart" || result == "ambiguous" || result == "invalid")  {
         return result; // wait if we restart the game all keybinds would be gone? 
-        // ok lowk this has to be in main. we have to open a file if we're in sequence. cannot handle it here
     }
     // else if (result == "hint") {
 
     // }
-    else if (result == "norandom" || result == "random") {
-        if (currPlayer->level < 3) {
-            break;
-        }
-        if (result == "norandom") {
-            string seqFile;
-            cin >> seqFile; // dont know if we're reading from a file...
+    else if (result == "sequence") {
+        if (readingFromFile) {
+            return result;
         }
         else {
-            seqFile = "";
+            string fileName;
+            cin >> fileName;
+            return fileParse(fileName); // basically allows errors to propogate backwards
+        }
+    }
+
+    else if (result == "norandom" || result == "random") {
+        string seqFile;
+        if (currPlayer->level < 3) {
+            return ""; // no need to do anything
+        }
+        if (result == "norandom") {
+            if (!readingFromFile) {
+                cin >> seqFile;
+            }
+            else {
+                return result; // let caller deal with it
+            }
+        }
+        else {
+            seqFile = ""; // result was random, so seqFile should be nothing!
         }
         currPlayer->level->setFile(seqFile);
         
@@ -136,7 +236,7 @@ string gameController::decipherCommand(string toInterpret) {
         currPlayer->currBlock = Block(result); // have to make sure that copy assignment of blocks deletes the old one or smth that works with unique pointers
     }
     else if (result == "blind") {
-        opponent=>grid->blind;
+        opponent=>grid->blind();
     }
     else if (result == "heavy") {
         // apply heavy modifier here
@@ -153,8 +253,8 @@ string gameController::decipherCommand(string toInterpret) {
     }
     else {
         matchMultiplied(result, multiplier); // handles all multiplied stuff
-        return ""; // placeholder ig, when we move it all to main it should be fine
     }
+    return ""; 
 }
 
 string gameController::commandMatch(const string &input) {
