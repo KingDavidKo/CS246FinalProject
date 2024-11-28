@@ -8,9 +8,10 @@ using namespace std;
 Grid::Grid(): currentBlock {nullptr} { // this is just so we have something there for the block ig
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < 18; j++) {
-            cells[i][j] = unique_ptr<Cell>{}; // empty unique pointer		
+            cells[j][i] = unique_ptr<Cell>{}; // empty unique pointer		
         }
     }
+	blind = false;
 
 }
 
