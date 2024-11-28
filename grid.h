@@ -46,7 +46,7 @@ class Grid  : public Subject {
 
     // add int blocksSinceLastDrop, bool level3, bool level4 later
     
-    void clearFullRows();
+    int clearFullRows();
     
     public:
 	//int rows, columns;
@@ -66,7 +66,7 @@ class Grid  : public Subject {
 
 	bool isValidMove(Block* b, int dx, int dy, bool CW, bool CCW);
     	void moveBlock(Block* b, int dx, int dy, bool CW, bool CCW);
-	void dropBlock(Block* b);
+	bool dropBlock(Block* b);
 
 
 	// accessors and mutators

@@ -190,7 +190,7 @@ void Grid::moveBlock(Block* b, int dx, int dy, bool CW, bool CCW){
 }
 
 // drop some block (usually the current block but it can vary)
-void Grid::dropBlock(Block * b){
+bool Grid::dropBlock(Block * b){
 	
 	while(isValidMove(b, 0, 1, false, false)) { // moving one down
 		moveBlock(b, 0, 1, false, false); // if you can move the block down one, then move it down one
@@ -201,7 +201,7 @@ void Grid::dropBlock(Block * b){
 
 
 	// check if any lines are cleared -- separate method
-	clearFullRows();
+	int linescleared = clearFullRows();
 
 
 	// check if any blocks are dead,
@@ -219,19 +219,21 @@ void Grid::dropBlock(Block * b){
 	// SO WE CAN SAFELY SET THE CURRENTBLOCK PTR TO NULLPTR HERE
 	
 	currentBlock = nullptr; // we dropped the block -- it's no longer the current block
+	if (linescleared >= 2) return true;
+	else return false;
 }
 
 
 // checks for cleared rows, and moves the blocks down + increments the score appropriately if 
 // any rows are cleared
-void Grid::clearFullRows(){
+int Grid::clearFullRows(){
 	int linesCleared = 0;
 	int rows = 18;
 	int cols = 11;
 
-	int rowsLeftToCheck = 4;
+	//int rowsLeftToCheck = 4;
 
-	for (int y = rows - 1; y > rows - 1 - rowsLeftToCheck; --y){ // we check the bottom 4 rows, cause only 4 rows can be cleared a at a time max
+	for (int y = rows - 1; y >= 0; --y){ // we check the bottom 4 rows, cause only 4 rows can be cleared a at a time max
 		
 		// each loop iteration checks if the bottom row is full or not
 		bool isFull = true;
@@ -277,7 +279,8 @@ void Grid::clearFullRows(){
 
 	// update the score
 	int addedpoints = (linesCleared + level) * (linesCleared + level); 
-	addToScore(addedpoints);	
+	addToScore(addedpoints);
+	return linesCleared;	
 
 }
 	
