@@ -12,6 +12,8 @@ class Level {
         Level(Grid *g);
         virtual std::shared_ptr<Block> generateBlock() = 0;
         std::shared_ptr<Block> createBlock(char type, int x = 0, int y = 3);
+        virtual ~Level() = default; // Virtual destructor ensures proper cleanup.
+
 };
 
 

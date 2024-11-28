@@ -35,7 +35,7 @@ class gameController {
     public:
         gameController(int level = 0, bool textOnly = false, int seed = -1, string file1 = "sequence1.txt", string file2 = "sequence2.txt");
         string decipherCommand(string toInterpret, bool readingFromFile = false);
-        void renameCommand(string og, string curr);
+        // void renameCommand(string og, string curr);
         void run();
         void render();
         bool isABlock(string potentialBlock);

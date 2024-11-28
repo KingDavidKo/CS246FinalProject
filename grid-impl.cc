@@ -6,8 +6,8 @@
 using namespace std;
 
 Grid::Grid(): currentBlock {nullptr} { // this is just so we have something there for the block ig
-    for (int i = 0; i < 18; i++) {
-        for (int j = 0; j < 11; j++) {
+    for (int i = 0; i < 11; i++) {
+        for (int j = 0; j < 18; j++) {
             cells[i][j] = unique_ptr<Cell>{}; // empty unique pointer		
         }
     }
@@ -15,7 +15,7 @@ Grid::Grid(): currentBlock {nullptr} { // this is just so we have something ther
 }
 
 // sets the current block in the starting position
-void Grid::setCurrent(shared_ptr<Block> block) {
+void Grid::setCurrent(Block * block) {
     // the last "current block" should alr be in the Blocks vector, so it's safe to reassign the pointer
     currentBlock = block;
 
@@ -43,14 +43,23 @@ void Grid::setCurrent(shared_ptr<Block> block) {
     blocksInGrid.emplace_back(currentBlock);	
 }
 
-
 void Grid::removeBlock(Block * block){
-	for (auto it = blocksInGrid.begin(); it != blocksInGrid.end();){
-		if (it->get() == block) blocksInGrid.erase(it);
-		else ++it;
-	}
-	// ok we could break after we erase the block from the grid but im not gonna do that just to be sure
+    for (auto it = blocksInGrid.begin(); it != blocksInGrid.end();){
+        if (*it == block) {
+            it = blocksInGrid.erase(it);  // Erase returns the next iterator
+        } else {
+            ++it;
+        }
+    }
 }
+
+// void Grid::removeBlock(Block * block){
+// 	for (Block * it = blocksInGrid.begin(); it != blocksInGrid.end();){
+// 		if (it == block) blocksInGrid.erase(it);
+// 		else ++it;
+// 	}
+// 	// ok we could break after we erase the block from the grid but im not gonna do that just to be sure
+// }
 
 bool Grid::isGameOver() {
 	return gameOver;
@@ -92,7 +101,7 @@ vector<char> Grid::returnState(int n) {
 // CW for clockwise rotation
 // CCW for counterclockwise rotation
 // remember that positive dx goes right, positive dy goes down
-bool Grid::isValidMove(shared_ptr<Block> block, int dx, int dy, bool CW, bool CCW){
+bool Grid::isValidMove(Block* block, int dx, int dy, bool CW, bool CCW){
     std::vector<std::pair<int, int>> originalInternalCoords;
     for (Cell* cell : block->getCells()) {
         originalInternalCoords.emplace_back(cell->getInternalX(), cell->getInternalY());
@@ -138,7 +147,7 @@ bool Grid::isValidMove(shared_ptr<Block> block, int dx, int dy, bool CW, bool CC
 // moves a block given translation or rotation
 // this should only be used after isValidMove has validated the move
 // remember that positive dx goes right, positive dy goes down
-void Grid::moveBlock(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW){
+void Grid::moveBlock(Block* b, int dx, int dy, bool CW, bool CCW){
 	
 	// Step 1: save the old cell grid coords before the block move
 	// we're gonna move the unique_ptrs later
@@ -180,7 +189,7 @@ void Grid::moveBlock(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW){
 }
 
 // drop some block (usually the current block but it can vary)
-void Grid::dropBlock(shared_ptr<Block> b){
+void Grid::dropBlock(Block * b){
 	
 	while(isValidMove(b, 0, 1, false, false)) { // moving one down
 		moveBlock(b, 0, 1, false, false); // if you can move the block down one, then move it down one
@@ -261,7 +270,7 @@ void Grid::clearFullRows(){
 	} // end of line clearing for loop
 	
 	// update the block anchors for each block	
-	for (shared_ptr<Block> block : blocksInGrid){
+	for (auto block : blocksInGrid){
 		block->updateAnchorY();	
 	}
 
@@ -277,11 +286,11 @@ void Grid::clearFullRows(){
 
 
 // mutators and accessors
-shared_ptr<Block> Grid::returnCurrentBlock() {
+Block * Grid::returnCurrentBlock() {
 		return currentBlock;
 }
 
-void Grid::setCurrentBlock(shared_ptr<Block> freshBlock) {
+void Grid::setCurrentBlock(Block * freshBlock) {
 	currentBlock = freshBlock;
 	return;
 }

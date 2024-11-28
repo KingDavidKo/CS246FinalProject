@@ -1,3 +1,5 @@
+#ifndef PLAYER_H
+#define PLAYER_H
 #include <memory>
 #include <string>
 #include "grid.h"
@@ -30,3 +32,4 @@ class Player {
         void decrementLevel();
         void updateLevel();
 };
+#endif

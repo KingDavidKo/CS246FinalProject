@@ -16,7 +16,7 @@ class Cell;
 
 class Grid  : public Subject {
     
-    shared_ptr<Block> currentBlock;
+    Block * currentBlock;
     int current_x, current_y; // bottom left coords for currentBlock
 	
      // only Grid deletes Cells, never Block
@@ -31,7 +31,7 @@ class Grid  : public Subject {
 	// 2D array, not a vector, as the board is a set size
 
 
-    vector<shared_ptr<Block>> blocksInGrid; // In order of generation
+    vector<Block*> blocksInGrid; // In order of generation
 				      // raw pointer because Cell will delete Block,
 				      // so Grid doesn't need to
 				      // the grid dtor should destruct every cell in thegrid to ensure that this happens
@@ -52,7 +52,7 @@ class Grid  : public Subject {
 	//int rows, columns;
 		unique_ptr<Cell> cells[11][18]; // I'm so sorry 🥺 moved to public
         Grid();
-        void addBlock(shared_ptr<Block> block); // adds block to top left, updating the grid coords for that block and the cells in that block
+        void addBlock(Block* block); // adds block to top left, updating the grid coords for that block and the cells in that block
         void removeBlock(Block * b); // used only when all block cells are cleared
 	// raw pointer cause it uses "this" in the block's method	
 
@@ -61,19 +61,19 @@ class Grid  : public Subject {
         bool isGameOver();
         vector<char> returnState(int n); // returns a row of chars representing the grid
 	
-	void setCurrent(shared_ptr<Block> b); // set current block
+	void setCurrent(Block* b); // set current block
 		
 
-	bool isValidMove(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW);
-    	void moveBlock(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW);
-	void dropBlock(shared_ptr<Block> b);
+	bool isValidMove(Block* b, int dx, int dy, bool CW, bool CCW);
+    	void moveBlock(Block* b, int dx, int dy, bool CW, bool CCW);
+	void dropBlock(Block* b);
 
 
 	// accessors and mutators
 	int getLevel();
 	int getScore();
-	shared_ptr<Block> returnCurrentBlock(); 
-	void setCurrentBlock(shared_ptr<Block> freshBlock);
+	Block* returnCurrentBlock(); 
+	void setCurrentBlock(Block* freshBlock);
 	void addToScore(int s);
 	void setLevel(int newlevel);
 
