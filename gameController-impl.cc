@@ -165,9 +165,41 @@ void gameController::render() {
     cout << "Score:\t" << playerOne.score << "\t" << "Score:\t" << playerTwo.score << endl;
     
     for (int i = 0; i < 18; i++) {
-        playerOne.grid->notifyObservers(i);
+
+        
+        for (int j = 0; j < 11; j++) {
+
+
+            if (j+1 >= 3 && j+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerOne.grid->isBlind()) {
+                cout << '?';
+                
+                
+            } else if(!playerOne.grid->cells[i][j]){ // blank cell
+			    cout << ' ';
+            }
+            else{
+                
+                cout << playerOne.grid->cells[i][j]->getLetter();
+            }
+        }
+        //playerOne.grid->notifyObservers(i);
         cout << "\t";
-        playerTwo.grid->notifyObservers(i);
+        //playerTwo.grid->notifyObservers(i);
+        for (int j = 0; j < 11; j++) {
+
+
+            if (j+1 >= 3 && j+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerOne.grid->isBlind()) {
+                cout << '?';
+                
+                
+            } else if(!playerTwo.grid->cells[i][j]){ // blank cell
+			    cout << ' ';
+            }
+            else{
+                
+                cout << playerTwo.grid->cells[i][j]->getLetter();
+            }
+        }
         cout << endl;
     }
     cout << "-----------\t-----------" << endl;
@@ -182,13 +214,48 @@ void gameController::render() {
     ///////
     // Print next block here
     ///////
-
+    /*
     if (!textOnly) {
-        ///////
-        // Do graphical here
-        ///////
+
+        if (window) {
+            for (int row = 0; row <= 18; ++row) {
+                for (int col = 0; col <= 11; ++col) {
+                    
+                    char chr = playerOne->getState(row, col);
+                    int color = Xwindow::Black; // by default black
+
+                    if (chr >= 'a' && chr <= 'z') {
+                        color = Xwindow::Red;   // red
+                    } else if (chr >= 'A' && chr <= 'Z') {
+                        color = Xwindow::Green; // green
+                    } else if (chr >= '0' && chr <= '9') {
+                        color = Xwindow::Blue;  // blue
+                    } else if (chr == ' ') {
+                        color = Xwindow::White; // white
+                    }                
+                    window->fillRectangle((col - left) * PIXEL_SIZE, (row - top) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
+                }
+
+                for (int col = left; col <= right; ++col) {
+                    
+                    char chr = subject->getState(row, col);
+                    int color = Xwindow::Black; // by default black
+
+                    if (chr >= 'a' && chr <= 'z') {
+                        color = Xwindow::Red;   // red
+                    } else if (chr >= 'A' && chr <= 'Z') {
+                        color = Xwindow::Green; // green
+                    } else if (chr >= '0' && chr <= '9') {
+                        color = Xwindow::Blue;  // blue
+                    } else if (chr == ' ') {
+                        color = Xwindow::White; // white
+                    }                
+                    window->fillRectangle((col - left) * PIXEL_SIZE, (row - top) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
+                }
+            }
+        }
         return;
-    }
+    }*/
 }
 
 string gameController::fileParse(string fileName) {
