@@ -4,14 +4,15 @@
 Player::Player(int level, string filename): grid {new Grid()} {
     text = make_shared<TextObserver>(0, 18, 0, 11, grid);
     //graphics = make_shared<GraphicsObserver>(0, 18, 0, 11, grid);
-    filename = filename;
+    this->filename = filename;
     updateLevel();
+    grid->setCurrent(playerLevel->generateBlock());
+    this->nextBlock = playerLevel->generateBlock();
     
-
-    score = 0;
-    blind = false;
-    heavy = false;
-    force = false;
+    this->score = 0;
+    this->blind = false;
+    this->heavy = false;
+    this->force = false;
 }
 
 void Player::incrementLevel() {

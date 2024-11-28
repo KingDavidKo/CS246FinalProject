@@ -283,10 +283,10 @@ shared_ptr<Block> Grid::returnCurrentBlock() {
 		return currentBlock;
 }
 
-void Grid::setCurrentBlock(shared_ptr<Block> freshBlock) {
-	currentBlock = freshBlock;
-	return;
-}
+// void Grid::setCurrentBlock(shared_ptr<Block> freshBlock) {
+// 	currentBlock = freshBlock;
+// 	return;
+// }
 
 int Grid::getLevel() { return level; }
 

@@ -29,4 +29,5 @@ class Player {
         void incrementLevel();
         void decrementLevel();
         void updateLevel();
+        shared_ptr<Block> nextBlock;
 };

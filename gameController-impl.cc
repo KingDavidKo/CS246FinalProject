@@ -46,7 +46,10 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
 void gameController::run() {
     // initialize all the stuff!
     string command;
+    render();
     while (cin >> command) {
+        
+        
         string result = decipherCommand(command);
         if (result == "restart") {
             // destroy the boards and remake them!
@@ -55,6 +58,7 @@ void gameController::run() {
         else if (result == "ambiguous" || result == "invalid") {
             cout << result << endl;
         }
+        render();
     }
   
 
@@ -152,7 +156,7 @@ void gameController::multipleCommmandHandler(string result) {
         cout << "invalid command, try again!" << endl;
     }
     // check if we need to switch to the other player regardless? or we could just force player to drop
-    render();
+    
 }
 
 
@@ -168,6 +172,12 @@ void gameController::render() {
     }
     cout << "-----------\t-----------" << endl;
     cout << "Next:      \tNext:      " << endl;
+
+    if (currentPlayer == &playerOne) {
+        cout << "Blocc" << endl;
+    } else {
+        cout << "\t\t\tBlocc"<<endl;
+    }
 
     ///////
     // Print next block here

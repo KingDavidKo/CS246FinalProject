@@ -52,7 +52,7 @@ class Grid  : public Subject {
 	//int rows, columns;
 		unique_ptr<Cell> cells[18][11]; // I'm so sorry 🥺 moved to public
         Grid();
-        void addBlock(shared_ptr<Block> block); // adds block to top left, updating the grid coords for that block and the cells in that block
+       // void addBlock(shared_ptr<Block> block); // adds block to top left, updating the grid coords for that block and the cells in that block
         void removeBlock(Block * b); // used only when all block cells are cleared
 	// raw pointer cause it uses "this" in the block's method	
 
@@ -73,7 +73,7 @@ class Grid  : public Subject {
 	int getLevel();
 	int getScore();
 	shared_ptr<Block> returnCurrentBlock(); 
-	void setCurrentBlock(shared_ptr<Block> freshBlock);
+	// void setCurrentBlock(shared_ptr<Block> freshBlock);
 	void addToScore(int s);
 	void setLevel(int newlevel);
 
