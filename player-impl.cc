@@ -4,6 +4,7 @@
 Player::Player(int level, string filename): grid {new Grid()} {
     text = make_shared<TextObserver>(0, 18, 0, 11, grid);
     //graphics = make_shared<GraphicsObserver>(0, 18, 0, 11, grid);
+    this->level = level;
     this->filename = filename;
     updateLevel();
     grid->setCurrent(playerLevel->generateBlock());

@@ -11,6 +11,8 @@ Grid::Grid(): currentBlock {nullptr} { // this is just so we have something ther
             cells[i][j] = unique_ptr<Cell>{}; // empty unique pointer		
         }
     }
+	this->blind = false;
+	this->heavy = false;
 
 }
 
@@ -34,10 +36,10 @@ void Grid::setCurrent(shared_ptr<Block> block) {
         }
     }
 	
-    // for (int i = 0; i < 4; i++) {
-    //     cells[blockCells[i]->getGridY()][blockCells[i]->getGridX()] = uniquePtr(blockCells[i]); // put the cell there, by having the grid point to the cell there
+    for (int i = 0; i < 4; i++) {
+         cells[blockCells[i]->getGridY()][blockCells[i]->getGridX()] = unique_ptr<Cell>(blockCells[i]); // put the cell there, by having the grid point to the cell there
         
-    // }
+     }
 
     // add the block to our blocks vector
     blocksInGrid.emplace_back(currentBlock);	

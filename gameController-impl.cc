@@ -3,10 +3,10 @@ using namespace std;
 
 gameController::gameController(int level, bool textOnly, int seed, string file1, string file2): playerOne {Player(level, file1)}, playerTwo {Player(level, file2)} {
     // Arguments
-    level = level;
-    textOnly = textOnly;
-    file1 = file1;
-    file2 = file2;
+    this->level = level;
+    this->textOnly = textOnly;
+    this->file1 = file1;
+    this->file2 = file2;
     currentPlayer = &playerOne;
     opponent = &playerTwo;
     vector<string> blocks = {"I", "J", "L", "O", "S", "Z", "T"};

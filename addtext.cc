@@ -19,5 +19,4 @@ void TextObserver::notify(int n) {
   for (int i = 0; i < 11; i++) {
     cout << v[i];
   }
-  cout << endl;
 }
