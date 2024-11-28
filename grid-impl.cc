@@ -123,7 +123,7 @@ bool Grid::isValidMove(shared_ptr<Block> block, int dx, int dy, bool CW, bool CC
         }
 
         // check for collisions with existing cells on the grid
-        if (cells[new_y][new_x] != nullptr) {
+        if (cells[new_y][new_x] != nullptr && !block->containsCoords(new_x, new_y)) {
             // revert the block to its original state before returning
             block->resetState(originalInternalCoords, originalAnchorX, originalAnchorY);
             return false;
@@ -162,20 +162,30 @@ void Grid::moveBlock(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW){
     b->setAnchors(b->getXAnchor() + dx, b->getYAnchor() + dy);
     b->updateCellCoords();
 
-    vector<Cell*> cells = b->getCells();
+    vector<Cell*> blockCells = b->getCells();
 
     // Step 3: add the Block's cells back to the grid
-    // currently the cells are still where they used to be, so we're gonna use move
-    for (long unsigned int i = 0; i < cells.size(); ++i) {
+    // currently the cells are still where they used to be, so we're gonna 
 
-		Cell* cell = cells[i];
+    for (long unsigned int i = 0; i< blockCells.size(); ++i){
+		cells[originalGridCoords[i].second][originalGridCoords[i].first].release(); // temporarily release
+		// releases ownership without deleting
+	}
+	
+    for (long unsigned int i = 0; i < blockCells.size(); ++i) {
+
+		Cell* cell = blockCells[i];
         int x = cell->getGridX();
         int y = cell->getGridY();
 
-		// safely moving the cells from the old coords to the new coords
-		cells[y][x] = std::move(cells[originalGridCoords[i].second][originalGridCoords[i].first]);
-			
-		// I put the std:: here just as a reminder, we don't need it
+		//cout << "cell " << i << " of current block, with coords x: " << x << ", y: " << y << endl;
+
+		// safely moving the cells from the old coords to the new coords]
+		
+		
+		cells[y][x] = unique_ptr<Cell>(cell);
+
+
      }
 
 
@@ -310,3 +320,7 @@ void Grid::setBlind(bool isBlind){
 void Grid::setHeavy(bool isHeavy){
 	heavy = isHeavy;
 }
+
+
+bool Grid::isBlind() { return blind;}
+bool Grid::isHeavy() { return heavy; }

@@ -71,7 +71,7 @@ class Block {
 	
 	void updateAnchorY(); // sets anchor_y = highest 'y' value amongst the cells
 
-	
+	bool containsCoords(int x, int y);
 	
 	int getAge();
 

@@ -15,10 +15,10 @@ Block::Block(Grid *g, int x, int y, int levelOfBirth): g {g}, x_anchor {x}, y_an
 
 IBlock::IBlock(Grid *g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 	// inititalize the children cell vector
-	children.push_back(new Cell(0, 3, make_shared<IBlock>(*this)));
-	children.push_back(new Cell(1, 3, make_shared<IBlock>(*this)));
-	children.push_back(new Cell(2, 3, make_shared<IBlock>(*this)));
-	children.push_back(new Cell(3, 3, make_shared<IBlock>(*this)));
+	children.push_back(new Cell(0, 3, shared_ptr<IBlock>(this)));
+	children.push_back(new Cell(1, 3, shared_ptr<IBlock>(this)));
+	children.push_back(new Cell(2, 3, shared_ptr<IBlock>(this)));
+	children.push_back(new Cell(3, 3, shared_ptr<IBlock>(this)));
 
 	// add the letter
 	letter= 'I';
@@ -28,62 +28,62 @@ IBlock::IBlock(Grid *g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfB
 
 JBlock::JBlock(Grid *g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 
-	children.push_back(new Cell(0, 2, make_shared<JBlock>(*this)));
-	children.push_back(new Cell(0, 3, make_shared<JBlock>(*this)));
-	children.push_back(new Cell(1, 3, make_shared<JBlock>(*this)));
-	children.push_back(new Cell(2, 3, make_shared<JBlock>(*this)));
+	children.push_back(new Cell(0, 2, shared_ptr<JBlock>(this)));
+	children.push_back(new Cell(0, 3, shared_ptr<JBlock>(this)));
+	children.push_back(new Cell(1, 3, shared_ptr<JBlock>(this)));
+	children.push_back(new Cell(2, 3, shared_ptr<JBlock>(this)));
 	
 	letter = 'J';
 }
 
 LBlock::LBlock(Grid *g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 
-	children.push_back(new Cell(0, 3, make_shared<LBlock>(*this)));
-	children.push_back(new Cell(1, 3, make_shared<LBlock>(*this)));
-	children.push_back(new Cell(2, 3, make_shared<LBlock>(*this)));
-	children.push_back(new Cell(2, 2, make_shared<LBlock>(*this)));
+	children.push_back(new Cell(0, 3, shared_ptr<LBlock>(this)));
+	children.push_back(new Cell(1, 3, shared_ptr<LBlock>(this)));
+	children.push_back(new Cell(2, 3, shared_ptr<LBlock>(this)));
+	children.push_back(new Cell(2, 2, shared_ptr<LBlock>(this)));
 
 	letter = 'L';
 }
 
 OBlock::OBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
-	children.push_back(new Cell(0, 2, make_shared<OBlock>(*this)));
-	children.push_back(new Cell(0, 3, make_shared<OBlock>(*this)));
-	children.push_back(new Cell(1, 2, make_shared<OBlock>(*this)));
-	children.push_back(new Cell(1, 3, make_shared<OBlock>(*this)));
+	children.push_back(new Cell(0, 2, shared_ptr<OBlock>(this)));
+	children.push_back(new Cell(0, 3, shared_ptr<OBlock>(this)));
+	children.push_back(new Cell(1, 2, shared_ptr<OBlock>(this)));
+	children.push_back(new Cell(1, 3, shared_ptr<OBlock>(this)));
 
 	letter = 'O';
 }
 
 SBlock::SBlock(Grid *g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 
-	children.push_back(new Cell(0, 3, make_shared<SBlock>(*this)));
-	children.push_back(new Cell(1, 3, make_shared<SBlock>(*this)));
-	children.push_back(new Cell(1, 2, make_shared<SBlock>(*this)));
-	children.push_back(new Cell(2, 2, make_shared<SBlock>(*this)));
+	children.push_back(new Cell(0, 3, shared_ptr<SBlock>(this)));
+	children.push_back(new Cell(1, 3, shared_ptr<SBlock>(this)));
+	children.push_back(new Cell(1, 2, shared_ptr<SBlock>(this)));
+	children.push_back(new Cell(2, 2, shared_ptr<SBlock>(this)));
 	letter = 'S';
 }
 
 TBlock::TBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
 
-	children.push_back(new Cell(0, 2, make_shared<TBlock>(*this)));
-	children.push_back(new Cell(1, 2, make_shared<TBlock>(*this)));
-	children.push_back(new Cell(1, 3, make_shared<TBlock>(*this)));
-	children.push_back(new Cell(2, 2, make_shared<TBlock>(*this)));
+	children.push_back(new Cell(0, 2, shared_ptr<TBlock>(this)));
+	children.push_back(new Cell(1, 2, shared_ptr<TBlock>(this)));
+	children.push_back(new Cell(1, 3, shared_ptr<TBlock>(this)));
+	children.push_back(new Cell(2, 2, shared_ptr<TBlock>(this)));
 	letter = 'T';
 }
 
 ZBlock::ZBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
 
-	children.push_back(new Cell(0, 2, make_shared<ZBlock>(*this)));
-	children.push_back(new Cell(1, 2, make_shared<ZBlock>(*this)));
-	children.push_back(new Cell(1, 3, make_shared<ZBlock>(*this)));
-	children.push_back(new Cell(2, 3, make_shared<ZBlock>(*this)));
+	children.push_back(new Cell(0, 2, shared_ptr<ZBlock>(this)));
+	children.push_back(new Cell(1, 2, shared_ptr<ZBlock>(this)));
+	children.push_back(new Cell(1, 3, shared_ptr<ZBlock>(this)));
+	children.push_back(new Cell(2, 3, shared_ptr<ZBlock>(this)));
 	letter = 'Z';
 }
 
 SingleBlock::SingleBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} { // DOn't need levelOfBirht since permanent
-	children.push_back(new Cell(x, y, make_shared<SingleBlock>(*this)));
+	children.push_back(new Cell(x, y, shared_ptr<SingleBlock>(this)));
 	letter = '*';
 }
 
@@ -204,6 +204,8 @@ void Block::resetState(const std::vector<std::pair<int, int>>& originalCoords, i
 void Block::setAnchors(int newxanch, int newyanch){
 	x_anchor = newxanch;
 	y_anchor = newyanch;
+
+	//cout << "x anchor: " << x_anchor << "y anchor: " << y_anchor << endl;
 	updateCellCoords();
 }
 
@@ -220,6 +222,17 @@ Block::~Block(){
 	}
 
 }
+bool Block::containsCoords(int x, int y) {
+	bool hasCoords = false;
+	for (Cell* cell :children){
+		if (cell->getGridX() == x && cell->getGridY()){
+			hasCoords = true;
+		}
+	}
+	return hasCoords;
+
+}
+
 
 
 // sets the y_anchor to the highest 'y' value amongst the cells

@@ -80,6 +80,10 @@ class Grid  : public Subject {
 	void setBlind(bool isBlind);
 	void setHeavy(bool isHeavy);
 
+
+	bool isBlind();
+	bool isHeavy();
+
 	~Grid();
 };
 

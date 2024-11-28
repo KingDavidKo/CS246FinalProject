@@ -117,6 +117,7 @@ void gameController::multipleCommmandHandler(string result) {
         if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 1, 0, false, false)) {
             currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 1, 0, false, false);
         }
+
     }
     else if (result == "down") {
         // apply down
@@ -138,7 +139,7 @@ void gameController::multipleCommmandHandler(string result) {
     }
     else if (result == "drop") {
         // apply drop logic. should be done in a way such that i can continuously call drop a ton of times and nothing happens
-        //currentPlayer->grid->dropBlock();
+        currentPlayer->grid->dropBlock(currentPlayer->grid->returnCurrentBlock());
         Player * temp = currentPlayer;
         currentPlayer = opponent;
         opponent = temp;
