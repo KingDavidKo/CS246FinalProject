@@ -1,7 +1,7 @@
 #include "gameController.h"
 using namespace std;
 
-gameController::gameController(int level, bool textOnly, int seed, string file1, string file2): playerOne {Player(level)}, playerTwo {Player(level)} {
+gameController::gameController(int level, bool textOnly, int seed, string file1, string file2): playerOne {Player(level, file1)}, playerTwo {Player(level, file2)} {
     // Arguments
     level = level;
     textOnly = textOnly;
@@ -134,10 +134,11 @@ void gameController::multipleCommmandHandler(string result) {
     }
     else if (result == "drop") {
         // apply drop logic. should be done in a way such that i can continuously call drop a ton of times and nothing happens
-        currentPlayer->grid->dropBlock();
+        //currentPlayer->grid->dropBlock();
         Player * temp = currentPlayer;
         currentPlayer = opponent;
         opponent = temp;
+        
     }
     else if (result == "levelup") {
         // apply levelup
@@ -160,9 +161,9 @@ void gameController::render() {
     cout << "Score:\t" << playerOne.score << "\t" << "Score:\t" << playerTwo.score << endl;
     
     for (int i = 0; i < 18; i++) {
-        playerOne.grid.get()->notifyObservers(i);
+        playerOne.grid->notifyObservers(i);
         cout << "\t";
-        playerTwo.grid.get()->notifyObservers(i);
+        playerTwo.grid->notifyObservers(i);
         cout << endl;
     }
     cout << "-----------\t-----------" << endl;
@@ -204,11 +205,14 @@ string gameController::fileParse(string fileName) {
             }
         }
         else if (result == "norandom") { // norandom
+            /*
             string seqFile;
             in >> seqFile;
             currentPlayer->level->setFile(seqFile); // set File does not exist at this moment!
+            */
         }
         else if (result == "force") {
+            /*
             string block;
             in >> block;
             if (isABlock(block)) { // reprompt maybe if it's not  a block
@@ -216,7 +220,7 @@ string gameController::fileParse(string fileName) {
                 if (opponent->lost()) {
                     return "WON";
                 }
-            }
+            }*/
         }
         else {
             cerr << "FileParse error" << endl; // we should never get to this stage?
@@ -270,15 +274,17 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
         else {
             seqFile = ""; // result was random, so seqFile should be nothing!
         }
-        currentPlayer->level->setFile(seqFile); // i can't change the file from here...
+        /////////////currentPlayer->level->setFile(seqFile); // i can't change the file from here...
         
         // pass level seqFile. level knows that if seqFile isn't an empty string then it has to use norandom from now on. otherwise it resets
     }
     else if (isABlock(result)) {
-        currentPlayer->grid->setCurrentBlock(Block()); // have to make sure that copy assignment of blocks deletes the old one or smth that works with unique pointers
+        //currentPlayer->grid->setCurrentBlock(&currentPlayer->playerLevel->generateBlock()); // have to make sure that copy assignment of blocks deletes the old one or smth that works with unique pointers
+        // ^^ Guaranteed Memory Leak
     }
     else if (result == "blind") {
-        opponent->grid->blind();
+        //opponent->grid->blind();
+        // ^^ Doesn't exist yet
     }
     else if (result == "heavy") {
         // apply heavy modifier here
@@ -291,10 +297,11 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
             string block;
             cin >> block;
             if (isABlock(block)) { // reprompt maybe if it's not  a block
-                opponent->setCurrentBlock(block); 
-                if (opponent->lost()) {
-                    return "WON";
-                }
+                //opponent->setCurrentBlock(block); 
+                // What is lost??
+                // if (opponent->lost()) {
+                //     return "WON";
+                // }
             }
         }
     }
@@ -313,7 +320,7 @@ string gameController::commandMatch(const string &input) {
     if (input.length() > command.first.length()) {
       continue;
     }
-    for (int i = 0; i < input.length(); i++) {
+    for (long unsigned int i = 0; i < input.length(); i++) {
       if (command.first[i] != input[i]) {
         isAMatch = false;
         break;

@@ -1,28 +1,32 @@
 #include <memory>
+#include <string>
 #include "grid.h"
 #include "subject.h"
 #include "addgraphics.h"
 #include "addtext.h"
+#include "level.h"
+using namespace std;
 
 class Player {
     int maxlevel = 4;
     int minlevel = -1;
+    
     int level;
-
-        
-
+    string filename;
     public:
+        Grid * grid;
+        unique_ptr<Level> playerLevel;
         int score;
         bool blind;
         bool heavy;
         bool force;
-        Player(int level);
-        shared_ptr<Grid> grid;
+        
+        
         shared_ptr<TextObserver> text;
-        shared_ptr<GraphicsObserver> graphics;  
+        shared_ptr<GraphicsObserver> graphics;
+        Player(int level, string filename);
         int returnLevel();
         void incrementLevel();
         void decrementLevel();
-        //virtual ~AsciiArt();
-        //virtual char charAt(int row, int col, int tick) = 0;
+        void updateLevel();
 };

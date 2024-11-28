@@ -3,31 +3,32 @@
 
 Level::Level(Grid *g): g {g}, moves {0} {}
 
-Block Level::createBlock(char type, int x, int y) {
+std::shared_ptr<Block> Level::createBlock(char type, int x, int y) {
     switch(type) {
         case 'I':
-            return IBlock(g);
+            return std::make_shared<IBlock>(g);
         case 'J':
-            return JBlock(g);
+            return std::make_shared<JBlock>(g);
         case 'L':
-            return LBlock(g);
+            return std::make_shared<LBlock>(g);
         case 'O':
-            return OBlock(g);
+            return std::make_shared<OBlock>(g);
         case 'S':
-            return SBlock(g);
+            return std::make_shared<SBlock>(g);
         case 'T':
-            return TBlock(g);
+            return std::make_shared<TBlock>(g);
         case 'Z':
-            return ZBlock(g);
+            return std::make_shared<ZBlock>(g);
         case '*':
-            return SingleBlock(g, x, y);
+            return std::make_shared<SingleBlock>(g, x, y);
     }
+    return nullptr;
 }
 
 Level0::Level0(string file, Grid *g): Level(g), f {file}, filename {file} {} //be careful of closing RAII
 
 
-Block Level0::generateBlock() {
+std::shared_ptr<Block> Level0::generateBlock() {
     char nextBlock;
     if (!(f >> nextBlock)) {
         f.close();
@@ -42,7 +43,7 @@ Block Level0::generateBlock() {
 Level1::Level1(Grid *g): Level(g) {}
 
 
-Block Level1::generateBlock() {
+shared_ptr<Block> Level1::generateBlock() {
     char arr[12] = {'S','Z','I','I','J','J','L','L', 'O', 'O', 'T','T'};
     return this->createBlock(arr[rand() % 12]);
 
@@ -51,7 +52,7 @@ Block Level1::generateBlock() {
 Level2::Level2(Grid *g): Level(g) {}
 
 
-Block Level2::generateBlock() {
+shared_ptr<Block> Level2::generateBlock() {
     char arr[7] = {'S','Z','I','J','L','O','T'};
     return this->createBlock(arr[rand() % 7]);
 }
@@ -60,7 +61,7 @@ Block Level2::generateBlock() {
 Level3::Level3(Grid *g): Level(g) {}
 
 
-Block Level3::generateBlock() {
+shared_ptr<Block> Level3::generateBlock() {
     char arr[9] = {'S', 'S','Z', 'Z','I','J','L','O','T'};
     return this->createBlock(arr[rand() % 9]);
 }
@@ -69,12 +70,12 @@ Block Level3::generateBlock() {
 Level4::Level4(Grid *g): Level(g) {}
 
 
-Block Level4::generateBlock() {
+shared_ptr<Block> Level4::generateBlock() {
     vector<pair<int, int>> emptyCoords;
 
     if (moves != 0 && moves % 5 == 0) {
-        for (int i = 3; i < g->rows; i++) {
-            for (int j = 0; j < g->columns; j++) {
+        for (int i = 3; i < 18; i++) {
+            for (int j = 0; j < 15; j++) {
                 if (!(g->cells[i][j])) { // Find empty spot
                     emptyCoords.emplace_back(i,j);
                 }
@@ -83,7 +84,7 @@ Block Level4::generateBlock() {
     }
     int random = rand() % emptyCoords.size();
 
-    g->addBlock(createBlock('*', emptyCoords[random].first, emptyCoords[random].second));
+    //g->addBlock(createBlock('*', emptyCoords[random].first, emptyCoords[random].second));
 
     char arr[9] = {'S', 'S','Z', 'Z','I','J','L','O','T'};
     return this->createBlock(arr[rand() % 9]);

@@ -15,14 +15,14 @@ class Cell {
     protected:
         int x,y; // block-relative coordinates
 	int grid_x, grid_y;
-        Block* parent; // the Block that its a part of
+        shared_ptr<Block> parent; // the Block that its a part of
 				  // shared because the other 3 cells point to that Block too
 	// we are going to keep this as a raw pointer until we know it works, as we don't fully undestand shared pointers yet       
        
 	char letter;
 
     public:
-        Cell(int x, int y, Block* parent);
+        Cell(int x, int y, shared_ptr<Block> parent);
         
 	//void setParent(unique_ptr<Block> b);
 	

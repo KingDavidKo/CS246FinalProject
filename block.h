@@ -57,8 +57,8 @@ class Block {
 	
 	
 	vector<Cell*> getCells(); // get the  cells from this Block (useful for Grid)
-	void setXAnchor(int x);
-	void setYAnchor(int y);
+	//void setXAnchor(int x);
+	//void setYAnchor(int y);
 	void setAnchors(int newxanch, int newyanch);
 
 	void setBirthDate(int birthDate);
@@ -138,7 +138,9 @@ class ZBlock : public Block {
 // maybe the one debuff?
 class SingleBlock : public Block {
     public:
-        SingleBlock(Grid *g, int x, int y);    
+        SingleBlock(Grid *g, int x, int y, int levelOfBirth = 0);   
+		~SingleBlock(); 
+		char getLetter() override;
 };
 
 #endif

@@ -3,6 +3,9 @@
 #include <iostream>
 #include "grid.h"
 #include "observer.h"
+#include "subject.h"
+
+class Grid;
 
 class TextObserver : public Observer {
   int top, bottom, left, right;

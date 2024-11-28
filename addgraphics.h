@@ -7,7 +7,8 @@
 #include <iostream>
 #include "observer.h"
 #include "window.h"
-
+#include "subject.h"
+#include "grid.h"
 
 //#include "studio.h"
 

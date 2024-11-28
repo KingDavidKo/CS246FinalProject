@@ -16,10 +16,10 @@ class Cell;
 
 class Grid  : public Subject {
     
-    Block* currentBlock;
+    shared_ptr<Block> currentBlock;
     int current_x, current_y; // bottom left coords for currentBlock
 	
-    unique_ptr<Cell> cells[11][18]; // only Grid deletes Cells, never Block
+     // only Grid deletes Cells, never Block
 					  // therefore unique_ptr
 	// this also means that in addBlock, we get the array's vector of Cell pointers,
 	// then set the index corresponding to the Cell's grid coords to the points for that cell
@@ -31,7 +31,7 @@ class Grid  : public Subject {
 	// 2D array, not a vector, as the board is a set size
 
 
-    vector<Block*> blocksInGrid; // In order of generation
+    vector<shared_ptr<Block>> blocksInGrid; // In order of generation
 				      // raw pointer because Cell will delete Block,
 				      // so Grid doesn't need to
 				      // the grid dtor should destruct every cell in thegrid to ensure that this happens
@@ -50,29 +50,30 @@ class Grid  : public Subject {
     
     public:
 	//int rows, columns;
+		unique_ptr<Cell> cells[11][18]; // I'm so sorry 🥺 moved to public
         Grid();
-        void addBlock(Block block); // adds block to top left, updating the grid coords for that block and the cells in that block
-        void removeBlock(Block *b); // used only when all block cells are cleared
+        void addBlock(shared_ptr<Block> block); // adds block to top left, updating the grid coords for that block and the cells in that block
+        void removeBlock(Block * b); // used only when all block cells are cleared
 	// raw pointer cause it uses "this" in the block's method	
 
 
-	void dropBlock();
+	//void dropBlock();
         bool isGameOver();
         vector<char> returnState(int n); // returns a row of chars representing the grid
 	
-	void setCurrent(Block& b); // set current block
+	void setCurrent(shared_ptr<Block> b); // set current block
 		
 
-	bool isValidMove(Block* b, int dx, int dy, bool CW, bool CCW);
-    	void moveBlock(Block* b, int dx, int dy, bool CW, bool CCW);
-	void dropBlock(Block* b);
+	bool isValidMove(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW);
+    	void moveBlock(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW);
+	void dropBlock(shared_ptr<Block> b);
 
 
 	// accessors and mutators
 	int getLevel();
 	int getScore();
-	Block* returnCurrentBlock(); 
-	void setCurrentBlock(Block* freshBlock);
+	shared_ptr<Block> returnCurrentBlock(); 
+	void setCurrentBlock(shared_ptr<Block> freshBlock);
 	void addToScore(int s);
 	void setLevel(int newlevel);
 
