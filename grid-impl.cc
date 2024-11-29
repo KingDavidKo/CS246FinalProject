@@ -13,13 +13,13 @@ Grid::Grid(): currentBlock {nullptr} { // this is just so we have something ther
         }
     }
 	
-
+	this->score = 0;
 
 	this->heavy = false; 
 	// MAY BE SET TO TRUE FOR TESTING PURPOSES
 
 	this->blind = false; // testing
-
+	this->gameOver = false;
 	this->levelHeavy = false;
 	// MAY BE SET TRUE FOR TESTING PURPOSES
 
@@ -58,8 +58,9 @@ void Grid::setCurrent(shared_ptr<Block> block) {
 
 void Grid::removeBlock(Block * block){
 	for (auto it = blocksInGrid.begin(); it != blocksInGrid.end();){
-		if (it->get() == block) blocksInGrid.erase(it);
-		else ++it;
+		if (it->get() == block) {
+			blocksInGrid.erase(it);
+		} else ++it;
 	}
 	// ok we could break after we erase the block from the grid but im not gonna do that just to be sure
 }
