@@ -258,10 +258,10 @@ bool Grid::dropBlock(shared_ptr<Block> b){
 	bool restorespecialheavy = false;
 
 	if (b->getLetter() == '*'){
-		cout << "wow look its a * block" << endl;
+		//cout << "wow look its a * block" << endl;
 		
 		if (levelHeavy){
-			cout <<"level is heavy is on" << endl;
+			//cout <<"level is heavy is on" << endl;
 			
 			levelHeavy = false;
 			restorelevelheavy = true;
@@ -270,7 +270,8 @@ bool Grid::dropBlock(shared_ptr<Block> b){
 			heavy  = false;
 			restorespecialheavy = true;
 		}
-		cout <<"coords of x: " << b->getXAnchor() << ", y:" << b->getYAnchor() << endl;
+		// cout <<"coords of x: " << b->getXAnchor() << ", y:" << b->getYAnchor() << endl;
+		// cout << "the coords of its cell: x: " << b->getCells()[0]->getGridX() << ", y: " << b-> getYAnchor() << endl;
 	}
 	
 
@@ -278,8 +279,11 @@ bool Grid::dropBlock(shared_ptr<Block> b){
 	while(isValidMove(b, 0, 1, false, false)) { // moving one down
 		moveBlock(b, 0, 1, false, false); // if you can move the block down one, then move it down one
 
-		if (b->getLetter() == '*') cout <<"coords of x: " << b->getXAnchor() << ", y:" << b->getYAnchor() << endl;
-			
+		// if (b->getLetter() == '*') {
+		// 	cout << "after a moveBlock call" << endl;
+		// 	cout <<"coords of x: " << b->getXAnchor() << ", y:" << b->getYAnchor() << endl;
+		// 	cout << "the coords of its cell: x: " << b->getCells()[0]->getGridX() << ", y: " << b-> getYAnchor() << endl;
+		// }	
 	}
 	// go until you can't move it down any more
 		
@@ -294,9 +298,12 @@ bool Grid::dropBlock(shared_ptr<Block> b){
 		blocksSinceLastClear++; // otherwise we are 1 more block since last clear
 	}
 
-	if (b->getLetter() == '*') cout <<"coords of x: " << b->getXAnchor() << ", y:" << b->getYAnchor() << endl;
+	// if (b->getLetter() == '*') {
+	// 	cout << "after rows cleared:" << endl;
+	// 	cout <<"coords of x: " << b->getXAnchor() << ", y:" << b->getYAnchor() << endl;
+	// 	cout << "the coords of its cell: x: " << b->getCells()[0]->getGridX() << ", y: " << b-> getYAnchor() << endl;
+	// }
 
-	
 	// check if any blocks are dead,
 	// if they are, then try to go row by row to drop the blocks of ever cell
 	// idk ask about whether this is bonus or not
@@ -316,8 +323,21 @@ bool Grid::dropBlock(shared_ptr<Block> b){
 	// THE CURRENT BLOCK SHOULD ALREADY BE IN THE BLOCKS VECTOR,
 	// SO WE CAN SAFELY SET THE CURRENTBLOCK PTR TO NULLPTR HERE
 	
+	// if (b->getLetter() == '*') {
+	// 	cout << "current block is * with final coords -- x: " << b->getXAnchor() << ", y:" <<b->getYAnchor() << endl;
+
+	// 	cout << "the coords of its cell: x: " << b->getCells()[0]->getGridX() << ", y: " << b-> getYAnchor() << endl;
+
+		
+	// }
+
 	currentBlock = nullptr; // we dropped the block -- it's no longer the current block
 
+	
+
+	if (cells[17][5]){ // if not null
+		cout << "letter at 5th col and 17th row" << cells[17][5]->getLetter() << endl;
+	}
 
 	if (linescleared >= 2) return true;
 	else return false;

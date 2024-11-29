@@ -84,13 +84,15 @@ ZBlock::ZBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOf
 }
 
 SingleBlock::SingleBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} { // DOn't need levelOfBirht since permanent
-	children.push_back(new Cell(5, 3, this)); // centre column and y=3 as default
+	children.push_back(new Cell(0, 3, this)); // centre column and y=3 as default
 	setAnchors(5, 3); // just set the anchors
-
+	updateCellCoords();
 
 	// we are gonna assume that singleBlock doesn't increment the score, so mark it as "died"
 	blockDied = true;
 	letter = '*';
+
+	
 }
 
 
