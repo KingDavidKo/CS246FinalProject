@@ -543,6 +543,40 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
     return ""; 
 }
 
+void gameController::renameCommand(string curr, string desired) {
+  string validMatch = commandMatch(curr); // returns original (command.second)
+  if (validMatch == "invalid" || validMatch == "ambiguous") {
+    cout << validMatch << endl;
+    return;
+  }
+  string alreadyThere = commandMatch(desired);
+  if (alreadyThere != "invalid" && alreadyThere != "ambiguous") {
+    // now I need to check if desired is EXACTLY something in the map
+    // (command.first) if it is EXACTLY something else then we NEED to say it is
+    // already bound
+    for (auto it = this->command.begin(); it != this->command.end(); ++it) {
+      if (it->first == desired) {
+        cout << "The proposed new name is already bound!" << endl;
+        return;
+      }
+    }
+  }
+  // find the existing command in the map
+  // delete this pair from the map and then create a new one with the new name
+  // as the key
+  // command.first = desired;
+  for (auto it = this->command.begin(); it != this->command.end(); ++it) {
+    if (it->second == validMatch) {
+      this->command.erase(it);
+      break;
+    }
+  }
+  command[desired] = validMatch;
+  // comment the below out later, just for testing!
+  cout << "Renamed " << curr << " to " << desired << endl;
+  cout << command[desired] << endl;
+}
+
 string gameController::commandMatch(const string &input) {
   string matchedCommand;
   int matchCount = 0;
