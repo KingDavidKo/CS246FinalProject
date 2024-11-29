@@ -84,7 +84,12 @@ ZBlock::ZBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOf
 }
 
 SingleBlock::SingleBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} { // DOn't need levelOfBirht since permanent
-	children.push_back(new Cell(x, y, this));
+	children.push_back(new Cell(5, 3, this)); // centre column and y=3 as default
+	setAnchors(5, 3); // just set the anchors
+
+
+	// we are gonna assume that singleBlock doesn't increment the score, so mark it as "died"
+	blockDied = true;
 	letter = '*';
 }
 
@@ -237,6 +242,7 @@ Block::~Block(){
 	
 	// if the block didn't die of old age, then it was cleared, and we increment the grid's score
 	if (!blockDied){
+		//cout << "letter: " << letter << endl;
 		
 		int scoreAdd = (levelOfBirth + 1) * (levelOfBirth + 1);
 		
@@ -297,3 +303,6 @@ int Block::getAge() { return lifetimeCount; }
 
 int Block::getXAnchor() { return x_anchor;}
 int Block::getYAnchor() { return y_anchor;}
+
+
+

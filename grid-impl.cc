@@ -12,15 +12,18 @@ Grid::Grid(): currentBlock {nullptr} { // this is just so we have something ther
             cells[i][j] = unique_ptr<Cell>{}; // empty unique pointer		
         }
     }
-	this->blind = false;
+	
 
 
 	this->heavy = false; 
 	// MAY BE SET TO TRUE FOR TESTING PURPOSES
 
+	this->blind = true; // testing
 
 	this->levelHeavy = false;
 	// MAY BE SET TRUE FOR TESTING PURPOSES
+
+	//setLevel(4); // FOR TESTING
 }
 
 // sets the current block in the starting position
@@ -263,6 +266,12 @@ bool Grid::dropBlock(shared_ptr<Block> b){
 	// check if any lines are cleared -- separate method
 	int linescleared = clearFullRows();
 
+	//cout << "lines cleared: " << linescleared << endl;
+	if (linescleared > 0 ) blocksSinceLastClear = 0; // if we cleared a line, then we are 0 blocks since last clear
+	else if (b->getLetter() != '*'){ //  the '*' means a debuff block -- this isn't counted
+		blocksSinceLastClear++; // otherwise we are 1 more block since last clear
+	}
+
 
 	// check if any blocks are dead,
 	// if they are, then try to go row by row to drop the blocks of ever cell
@@ -279,6 +288,8 @@ bool Grid::dropBlock(shared_ptr<Block> b){
 	// SO WE CAN SAFELY SET THE CURRENTBLOCK PTR TO NULLPTR HERE
 	
 	currentBlock = nullptr; // we dropped the block -- it's no longer the current block
+
+
 	if (linescleared >= 2) return true;
 	else return false;
 }
@@ -358,7 +369,10 @@ int Grid::clearFullRows(){
 	//cout << "lines cleared: " << linesCleared << endl;
 
 	// update the score
-	int addedpoints = (linesCleared + level) * (linesCleared + level);
+	int addedpoints = 0;
+
+	// if we cleared lines, then we add to the score
+	if (linesCleared > 0) addedpoints = (linesCleared + level) * (linesCleared + level);
 	
 	//cout << "number of points to add: " << addedpoints;
 	
@@ -397,7 +411,15 @@ void Grid::setLevel(int newlevel){
 	if (level >= 3){
 		levelHeavy = true;
 	}
+
+	
 	if (level == 4){
+		blocksSinceLastClear = 0;
+		// justification:
+		// since this only applies in level 4, it should be relevant in the other levels
+
+		// the counter for "blocks since last clear" is only maintained during level 4
+
 		centreBlockOn = true;
 	}
 }
@@ -415,3 +437,9 @@ void Grid::setHeavy(bool isHeavy){
 bool Grid::isBlind() { return blind;}
 bool Grid::isHeavy() { return heavy; }
 bool Grid::isLevelHeavy() { return levelHeavy; }
+bool Grid::isCentreBlockDebuffOn() { return centreBlockOn; }
+
+int Grid::getBlocksSinceLastClear(){ return blocksSinceLastClear; }
+void Grid::resetBlocksSinceLastClear() { blocksSinceLastClear = 0; }
+
+

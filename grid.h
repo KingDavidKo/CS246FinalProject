@@ -52,6 +52,8 @@ class Grid  : public Subject {
 
 	bool centreBlockOn; // used for level 4
 
+	int blocksSinceLastClear;
+
 
     int clearFullRows();
     
@@ -91,8 +93,16 @@ class Grid  : public Subject {
 	bool isBlind();
 	bool isHeavy();
 	bool isLevelHeavy();
+	bool isCentreBlockDebuffOn();
+	int getBlocksSinceLastClear();
+
+
+	void resetBlocksSinceLastClear();
 
 	~Grid();
 };
 
 #endif
+
+
+

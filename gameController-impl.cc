@@ -15,7 +15,7 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
     opponent = &playerTwo;
     vector<string> blocks = {"I", "J", "L", "O", "S", "Z", "T"};
     this->blocks = blocks;
-    if (textOnly){
+    if (!textOnly){
         this->window = new Xwindow(2*GRAPHIC_COL_SIZE*PIXEL_SIZE, GRAPHIC_ROW_SIZE*PIXEL_SIZE);
     }
     else{
@@ -197,6 +197,36 @@ void gameController::multipleCommmandHandler(string result) {
     else if (result == "drop") {
         // apply drop logic. should be done in a way such that i can continuously call drop a ton of times and nothing happens
         currentPlayer->grid->dropBlock(currentPlayer->grid->returnCurrentBlock());
+
+
+        // if it's been 5 blocks since last clear and the centre block debuff is on?
+        if (currentPlayer->grid->getBlocksSinceLastClear() == 5 && currentPlayer->grid->isCentreBlockDebuffOn()){
+            cout << "debuff block time" << endl;
+            
+            currentPlayer->incrementLevel();
+            currentPlayer->incrementLevel();
+            currentPlayer->incrementLevel();
+            currentPlayer->incrementLevel();
+
+            
+
+            currentPlayer->grid->setCurrent(currentPlayer->playerLevel->generateBlock()); // gets a * block from generate block
+            cout << "after segfault" << endl;
+            currentPlayer->grid->resetBlocksSinceLastClear(); // set it back to 0, cause we add the thing every 5
+
+            // note that the single block starts at 5th column and is dropped there
+            
+            //currentPlayer->grid->setCurrent(make_shared<SingleBlock>(SingleBlock(currentPlayer->grid, 5, 3, level)));
+
+
+            // drop the debuff block
+            cout << "current block letter: " << currentPlayer->grid->returnCurrentBlock()->getLetter() << endl;
+            currentPlayer->grid->dropBlock(currentPlayer->grid->returnCurrentBlock());
+
+
+        }
+
+
         Player * temp = currentPlayer;
         currentPlayer = opponent;
         opponent = temp;
@@ -222,7 +252,9 @@ void gameController::multipleCommmandHandler(string result) {
 
 
 void gameController::render() {
-    cout << "Level:\t" << playerOne.returnLevel() << "\t" << "Level:\t" << playerTwo.returnLevel() << endl;
+    //cout << "Level:\t" << playerOne.returnLevel() << "\t" << "Level:\t" << playerTwo.returnLevel() << endl;
+    
+    cout << "Level:\t" << playerOne.grid->getLevel() << "\t" << "Level:\t" << playerTwo.grid->getLevel() << endl;
     cout << "Score:\t" << playerOne.grid->getScore() << "\t" << "Score:\t" << playerTwo.grid->getScore() << endl;
     
     for (int i = 0; i < 18; i++) {
@@ -231,7 +263,7 @@ void gameController::render() {
         for (int j = 0; j < 11; j++) {
 
 
-            if (j+1 >= 3 && j+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerOne.grid->isBlind()) {
+            if (i+1 >= 3 && i+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerOne.grid->isBlind()) {
                 cout << '?';
                 
                 

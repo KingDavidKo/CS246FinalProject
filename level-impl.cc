@@ -73,6 +73,9 @@ Level4::Level4(Grid *g): Level(g) {}
 shared_ptr<Block> Level4::generateBlock() {
     vector<pair<int, int>> emptyCoords;
 
+
+    // what is this for
+    /*
     if (moves != 0 && moves % 5 == 0) {
         for (int i = 3; i < 18; i++) {
             for (int j = 0; j < 15; j++) {
@@ -81,7 +84,12 @@ shared_ptr<Block> Level4::generateBlock() {
                 }
             }
         }
+    }*/
+    if (g->getBlocksSinceLastClear() == 5){ // * block debuff is on, since it's level 4
+        cout << "generate a * block" << endl;
+        return this->createBlock('*');
     }
+
     int random = rand() % emptyCoords.size();
 
     //g->addBlock(createBlock('*', emptyCoords[random].first, emptyCoords[random].second));
