@@ -202,7 +202,7 @@ void gameController::multipleCommmandHandler(string result) {
         // if it's been 5 blocks since last clear and the centre block debuff is on?
         if (currentPlayer->grid->getBlocksSinceLastClear() == 5 && currentPlayer->grid->isCentreBlockDebuffOn()){
             cout << "debuff block time" << endl;
-            
+            // testing
             currentPlayer->incrementLevel();
             currentPlayer->incrementLevel();
             currentPlayer->incrementLevel();
@@ -417,6 +417,13 @@ string gameController::fileParse(string fileName) {
                 return temp; // only thing that should be returning should really just be "restart"
             }
         }
+        else if (result == "rename") {
+            string prevName;
+            string newName;
+            in >> prevName;
+            in >> newName;
+            renameCommand(prevName, newName);
+        }
         else if (result == "norandom") { // norandom
             /*
             string seqFile;
@@ -460,6 +467,18 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
     // else if (result == "hint") {
 
     // }
+    else if (result == "rename") {
+        if (readingFromFile) {
+            return result;
+        } 
+        else {
+            string prevName;
+            string newName;
+            cin >> prevName;
+            cin >> newName;
+            renameCommand(prevName, newName);
+            }
+        }
     else if (result == "sequence") {
         if (readingFromFile) {
             return result;
