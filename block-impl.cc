@@ -245,9 +245,10 @@ Block::~Block(){
 	// if the block didn't die of old age, then it was cleared, and we increment the grid's score
 	if (!blockDied){
 		//cout << "letter: " << letter << endl;
-		
+		//cout << "level of birth: " << levelOfBirth << endl;
 		int scoreAdd = (levelOfBirth + 1) * (levelOfBirth + 1);
 		
+		//cout << "score to add: " << scoreAdd << endl;
 		
 		g->addToScore(scoreAdd);	
 	// increment the score of the grid appropriately
