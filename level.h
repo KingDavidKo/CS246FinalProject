@@ -11,7 +11,7 @@ class Level {
     public:
         Level(Grid *g);
         virtual std::shared_ptr<Block> generateBlock() = 0;
-        std::shared_ptr<Block> createBlock(char type);
+        std::shared_ptr<Block> createBlock(char type, int level);
 };
 
 
