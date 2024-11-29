@@ -2,7 +2,7 @@
 using namespace std;
 
 const int PIXEL_SIZE = 10;
-const int GRAPHIC_ROW_SIZE = 18;
+const int GRAPHIC_ROW_SIZE = 25;
 const int GRAPHIC_COL_SIZE = 11;
 
 gameController::gameController(int level, bool textOnly, int seed, string file1, string file2): playerOne {Player(1, level, file1)}, playerTwo {Player(2, level, file2)} {
@@ -16,7 +16,7 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
     vector<string> blocks = {"I", "J", "L", "O", "S", "Z", "T"};
     this->blocks = blocks;
     if (!textOnly){
-        this->window = new Xwindow(2*GRAPHIC_COL_SIZE*PIXEL_SIZE, GRAPHIC_ROW_SIZE*PIXEL_SIZE);
+        this->window = new Xwindow(2*GRAPHIC_COL_SIZE*PIXEL_SIZE + 10, GRAPHIC_ROW_SIZE*PIXEL_SIZE);
     }
     else{
         this->window = nullptr;
@@ -360,17 +360,20 @@ void gameController::render() {
                     //char chr = playerOne->getState(row, col);
                     int color = Xwindow::Black; // by default black
 
-                    if (chr >= 'a' && chr <= 'z') {
-                        color = Xwindow::Red;   // red
-                    } else if (chr >= 'A' && chr <= 'Z') {
+                    if (chr == 'S') {
                         color = Xwindow::Green; // green
-                    } else if (chr >= '0' && chr <= '9') {
+                    } else if (chr == 'J') {
                         color = Xwindow::Blue;  // blue
                     } else if (chr == ' ') {
                         color = Xwindow::White; // white
-                    }                
+                    } else if (chr == 'Z') {
+                        color = Xwindow::Red;   // red
+                    } else{
+                        color = Xwindow::Red;   // red
+                    }                      
                     window->fillRectangle(j * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
+                
                 for (int j = 0; j < 11; ++j) {
                     
                     if (i+1 >= 3 && i+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerTwo.grid->isBlind()) {
@@ -386,6 +389,40 @@ void gameController::render() {
 
                     int color = Xwindow::Black; // by default black
 
+                    if (chr == 'S') {
+                        color = Xwindow::Green; // green
+                    } else if (chr == 'J') {
+                        color = Xwindow::Blue;  // blue
+                    } else if (chr == ' ') {
+                        color = Xwindow::White; // white
+                    } else if (chr == 'Z') {
+                        color = Xwindow::Red;   // red
+                    } else if (chr >= 'A' && chr <= 'Z') {
+                        color = Xwindow::Red;   // red
+                    }         
+                    window->fillRectangle((GRAPHIC_COL_SIZE + j) * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
+                }
+                //window->drawString(0, 18 * PIXEL_SIZE, "-----------\t-----------"); // update window
+                window->fillRectangle(0, 19 * PIXEL_SIZE, window->getWidth(), 2, Xwindow::Black);
+                window->drawString(5, 20 * PIXEL_SIZE+ 2, "Next:");
+                window->drawString(window->getWidth()/2 + 5, 20 * PIXEL_SIZE + 2, "Next:");
+                //window->drawString(window->getWidth()/2, 20 * PIXEL_SIZE, "-----------\t-----------");
+        char grid[2][4] =  { {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '} };
+        for (auto child : currentPlayer->nextBlock->getCells()) {
+                grid[child->getGridY()-2][child->getGridX()] = child->getLetter();
+        }
+    
+        if (currentPlayer == &playerOne) { // we can also check playerNum here
+            
+                
+            
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 4; j++) {
+                    chr = grid[i][j];
+                
+                    //char chr = playerOne->getState(row, col);
+                    int color = Xwindow::Black; // by default black
+
                     if (chr >= 'a' && chr <= 'z') {
                         color = Xwindow::Red;   // red
                     } else if (chr >= 'A' && chr <= 'Z') {
@@ -394,12 +431,39 @@ void gameController::render() {
                         color = Xwindow::Blue;  // blue
                     } else if (chr == ' ') {
                         color = Xwindow::White; // white
-                    }                
-                    window->fillRectangle((GRAPHIC_COL_SIZE + j) * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
+                    }               
+                    window->fillRectangle(j * PIXEL_SIZE, (21 +i) * PIXEL_SIZE + 2, PIXEL_SIZE, PIXEL_SIZE, color);
+                }
+            }
+                
+            
+        } else {
+            
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 4; j++) {
+                    chr = grid[i][j];
+                
+                    //char chr = playerOne->getState(row, col);
+                    int color = Xwindow::Black; // by default black
+
+                    if (chr >= 'a' && chr <= 'z') {
+                        color = Xwindow::Red;   // red
+                    } else if (chr >= 'A' && chr <= 'Z') {
+                        color = Xwindow::Green; // green
+                    } else if (chr >= '0' && chr <= '9') {
+                        color = Xwindow::Blue;  // blue
+                    } else if (chr == ' ') {
+                        color = Xwindow::White; // white
+                    }               
+                    window->fillRectangle(j * PIXEL_SIZE + window->getWidth()/2 + 5, (21 +i) * PIXEL_SIZE + 2, PIXEL_SIZE, PIXEL_SIZE, color);
                 }
             }
             
         }
+                    
+                }
+                
+            }
     }
     return;
 }
