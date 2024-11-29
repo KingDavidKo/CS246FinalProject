@@ -368,8 +368,15 @@ void gameController::render() {
                         color = Xwindow::White; // white
                     } else if (chr == 'Z') {
                         color = Xwindow::Red;   // red
-                    } else{
-                        color = Xwindow::Red;   // red
+                    } else if (chr == 'I') {
+                        color = Xwindow::Turquoise;   // red
+                    } else if (chr == 'O') {
+                        color = Xwindow::Turquoise;   // red
+                    } else if (chr == '*') {
+                        color = Xwindow::Brown;   // red
+                    } 
+                    else{
+                        color = Xwindow::Black;   // red
                     }                      
                     window->fillRectangle(j * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
@@ -389,6 +396,8 @@ void gameController::render() {
 
                     int color = Xwindow::Black; // by default black
 
+                     
+
                     if (chr == 'S') {
                         color = Xwindow::Green; // green
                     } else if (chr == 'J') {
@@ -397,8 +406,15 @@ void gameController::render() {
                         color = Xwindow::White; // white
                     } else if (chr == 'Z') {
                         color = Xwindow::Red;   // red
-                    } else if (chr >= 'A' && chr <= 'Z') {
-                        color = Xwindow::Red;   // red
+                    } else if (chr == 'I') {
+                        color = Xwindow::Turquoise;   // red
+                    } else if (chr == 'O') {
+                        color = Xwindow::Turquoise;   // red
+                    } else if (chr == '*') {
+                        color = Xwindow::Brown;   // red
+                    } 
+                    else{
+                        color = Xwindow::Black;   // red
                     }         
                     window->fillRectangle((GRAPHIC_COL_SIZE + j) * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
@@ -423,15 +439,26 @@ void gameController::render() {
                     //char chr = playerOne->getState(row, col);
                     int color = Xwindow::Black; // by default black
 
-                    if (chr >= 'a' && chr <= 'z') {
-                        color = Xwindow::Red;   // red
-                    } else if (chr >= 'A' && chr <= 'Z') {
+                     
+
+                    if (chr == 'S') {
                         color = Xwindow::Green; // green
-                    } else if (chr >= '0' && chr <= '9') {
+                    } else if (chr == 'J') {
                         color = Xwindow::Blue;  // blue
                     } else if (chr == ' ') {
                         color = Xwindow::White; // white
-                    }               
+                    } else if (chr == 'Z') {
+                        color = Xwindow::Red;   // red
+                    } else if (chr == 'I') {
+                        color = Xwindow::Turquoise;   // red
+                    } else if (chr == 'O') {
+                        color = Xwindow::Turquoise;   // red
+                    } else if (chr == '*') {
+                        color = Xwindow::Brown;   // red
+                    } 
+                    else{
+                        color = Xwindow::Black;   // red
+                    }                    
                     window->fillRectangle(j * PIXEL_SIZE, (21 +i) * PIXEL_SIZE + 2, PIXEL_SIZE, PIXEL_SIZE, color);
                 }
             }
@@ -446,15 +473,26 @@ void gameController::render() {
                     //char chr = playerOne->getState(row, col);
                     int color = Xwindow::Black; // by default black
 
-                    if (chr >= 'a' && chr <= 'z') {
-                        color = Xwindow::Red;   // red
-                    } else if (chr >= 'A' && chr <= 'Z') {
+                     
+
+                    if (chr == 'S') {
                         color = Xwindow::Green; // green
-                    } else if (chr >= '0' && chr <= '9') {
+                    } else if (chr == 'J') {
                         color = Xwindow::Blue;  // blue
                     } else if (chr == ' ') {
                         color = Xwindow::White; // white
-                    }               
+                    } else if (chr == 'Z') {
+                        color = Xwindow::Red;   // red
+                    } else if (chr == 'I') {
+                        color = Xwindow::Turquoise;   // red
+                    } else if (chr == 'O') {
+                        color = Xwindow::Turquoise;   // red
+                    } else if (chr == '*') {
+                        color = Xwindow::Brown;   // red
+                    } 
+                    else{
+                        color = Xwindow::Black;   // red
+                    }             
                     window->fillRectangle(j * PIXEL_SIZE + window->getWidth()/2 + 5, (21 +i) * PIXEL_SIZE + 2, PIXEL_SIZE, PIXEL_SIZE, color);
                 }
             }
