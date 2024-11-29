@@ -2,7 +2,7 @@
 #include "cell.h"
 #include <vector>
 #include <utility>
-
+#include <algorithm>
 using namespace std;
 
 Grid::Grid(): currentBlock {nullptr} { // this is just so we have something there for the block ig
@@ -98,9 +98,21 @@ bool Grid::isValidMove(shared_ptr<Block> block, int dx, int dy, bool CW, bool CC
     std::vector<std::pair<int, int>> originalInternalCoords;
     for (Cell* cell : block->getCells()) {
         originalInternalCoords.emplace_back(cell->getInternalX(), cell->getInternalY());
+		
     }
     int originalAnchorX = block->getXAnchor();
     int originalAnchorY = block->getYAnchor();
+
+
+	std::vector<std::pair<int, int>> originalGridCoords;
+    for (Cell* cell : block->getCells()) {
+        originalGridCoords.emplace_back(cell->getGridX(), cell->getGridY());
+		
+    }
+
+	block->setAnchors(originalAnchorX + dx, originalAnchorY + dy);
+	block->updateCellCoords();
+	// the cells are not 
 
     // Apply rotation if specified
     if (CW) {
@@ -109,11 +121,17 @@ bool Grid::isValidMove(shared_ptr<Block> block, int dx, int dy, bool CW, bool CC
         block->rotateCCW();
     }
 
+	
     // Validate all cells in the block after translation and/or rotation
     for (Cell* cell : block->getCells()) {
-        // Calculate the new grid coordinates after translation
-        int new_x = cell->getGridX() + dx;
-        int new_y = cell->getGridY() + dy;
+        
+		// cell coords post translation or whatever
+		// THEIR GRID COORDS WERE ADJUSTED RIGHT AFTER THE IN THE SETANCHORS CALL -- DO NOT ADD DX AND DY HERE
+
+        int new_x = cell->getGridX();
+        int new_y = cell->getGridY();
+
+
 
         // Check grid boundaries (left, right, and bottom edges)
         if (new_x < 0 || new_x >= 11 || new_y < 0 || new_y >= 18) {
@@ -123,13 +141,41 @@ bool Grid::isValidMove(shared_ptr<Block> block, int dx, int dy, bool CW, bool CC
         }
 
         // check for collisions with existing cells on the grid
-        if (cells[new_y][new_x] != nullptr && !block->containsCoords(new_x, new_y)) {
+		//cout << "new y: " << new_y << "new x:" << new_x << endl;
+		//if (cells[new_y][new_x] !=nullptr) cout << cells[new_y][new_x]->getLetter() << endl;
+		
+
+		// experiment: !block->containsCoords(new_x, new_y) was removed from the conditional
+		pair<int, int> newcoords {new_x, new_y};
+		// uses std::find from algorithm library
+		bool inOriginal = find(originalGridCoords.begin(), originalGridCoords.end(), newcoords) != originalGridCoords.end();
+		// should be checking the original grid coordinates
+
+
+		// if that cell isn't null and that cell wasn't in the original cell grid coords 
+		// (the original cell coords should've been valid)
+		
+		if (cells[new_y][new_x] != nullptr && !inOriginal) {
+			// checks whether that one is null, or if the translated block contains the coords that we want to move in
+			
+			// if we found a cell that conflicts 
+
+
+			//cells[new_y][new_x] != nullptr was changed
+			// instead compare to an empty unique ptr
+	
+			//cout << "conflicting cell at coords x: " << new_x <<", y:" << new_y << endl;
             // revert the block to its original state before returning
             block->resetState(originalInternalCoords, originalAnchorX, originalAnchorY);
+
+
+
             return false;
         }
+		
     }
 
+	//cout << "move is valid" << endl;
     // revert the block to its original state before returning (no permanent changes during validation)
     block->resetState(originalInternalCoords, originalAnchorX, originalAnchorY);
     return true; // Move and/or rotation is valid
@@ -150,6 +196,8 @@ void Grid::moveBlock(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW){
     }
     // moving instead of like releasing now is just memory safer, cause the move ctor is built in
     // also less room for memory leaks
+
+	// ok instead we're gonna release temporarily to transfer over ownership
         
     // Step 2: perform the move or rotation as desired
     if (CW){
@@ -184,6 +232,7 @@ void Grid::moveBlock(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW){
 		
 		
 		cells[y][x] = unique_ptr<Cell>(cell);
+		cout << "coords of new cell -- y: " << y << ", x:" << x << endl; 
 
 
      }

@@ -124,6 +124,8 @@ void gameController::multipleCommmandHandler(string result) {
     else if (result == "down") {
         // apply down
         if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 0, 1, false, false)) {
+            cout << "down is valid" << endl;
+
             currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 0, 1, false, false);
         }
     }

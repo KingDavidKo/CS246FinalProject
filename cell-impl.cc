@@ -24,7 +24,7 @@ void Cell::reverseRows(){
 }
 
 void Cell::reverseCols(){
-	y = 3-x;
+	y = 3-y;
 }
 
 Cell::~Cell(){

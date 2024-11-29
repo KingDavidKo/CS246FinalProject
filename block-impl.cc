@@ -147,37 +147,53 @@ void Block::removeCell(Cell* c){
 
 
 void Block::rotateCW(){
+
+	// now let's do the rotation
+	for (Cell *c : children){	
+		c->swapCoords();
+		c->reverseRows();
+		
+	}
+	// NEED TO CALCULATE EMPTY ROWS BELOW AFTER COORDS SWAPPED AND ROWS REVERSED
+
 	int numEmptyRowsBelow = 0; // = 3 - highest 'x' amongst the cells
 	
 	int highestY = 0;
 	for (Cell* c : children){ // I put the type here for the vector element as a reminder
 		if (c->getInternalY() > highestY){
 			highestY = c->getInternalY();
+			//cout << "highest y cell at " << "x: "<< c->getInternalX() << "y: " << c->getInternalY() << endl;;
 		}
 	}
 	numEmptyRowsBelow = 3 - highestY;
 
-	// now let's do the rotation
-	for (Cell *c : children){	
-		c->swapCoords();
-		c->reverseRows();
+	for (Cell *c: children){
 		c->translateInternalY(numEmptyRowsBelow);
 		c->updateGridCoords();
 	}
+
+	//cout << "num of empty rows" << numEmptyRowsBelow << endl;
+	//cout << "anchors --  x: " << x_anchor << " y: " << y_anchor<< endl;  
 	
 }
 void Block::rotateCCW(){
+	
+
+	// now let's do the rotation
+	for (Cell *c : children){
+		c->swapCoords();
+		c->reverseCols();
+		
+	}
+
 	int numEmptyColsLeft = 3; // # of empty columns to the left, = lowest 'x' amongst the cells
 	for (Cell *c :children){
 		if (c->getInternalX() < numEmptyColsLeft){
 			numEmptyColsLeft = c->getInternalX();
 		}
 	}
-
-	// now let's do the rotation
 	for (Cell *c : children){
-		c->swapCoords();
-		c->reverseCols();
+		
 		c->translateInternalX(-1 * numEmptyColsLeft);
 		c->updateGridCoords();	
 	}
@@ -201,12 +217,14 @@ void Block::resetState(const std::vector<std::pair<int, int>>& originalCoords, i
     updateCellCoords();
 }
 
+
+// DOES NOT UPDATE THE CELL COORDINATES
 void Block::setAnchors(int newxanch, int newyanch){
 	x_anchor = newxanch;
 	y_anchor = newyanch;
 
 	//cout << "x anchor: " << x_anchor << "y anchor: " << y_anchor << endl;
-	updateCellCoords();
+	//updateCellCoords();
 }
 
 Block::~Block(){
