@@ -422,7 +422,7 @@ void gameController::render() {
                     window->fillRectangle((GRAPHIC_COL_SIZE + j) * PIXEL_SIZE, (i+2) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
                 //window->drawString(0, 18 * PIXEL_SIZE, "-----------\t-----------"); // update window
-                window->fillRectangle(0, 19 * PIXEL_SIZE, window->getWidth(), 2, Xwindow::Black);
+                window->fillRectangle(0, 21 * PIXEL_SIZE, window->getWidth(), 2, Xwindow::Black);
                 window->drawString(5, 22 * PIXEL_SIZE+ 2, "Next:");
                 window->drawString(window->getWidth()/2 + 5, 22 * PIXEL_SIZE + 2, "Next:");
                 //window->drawString(window->getWidth()/2, 20 * PIXEL_SIZE, "-----------\t-----------");
