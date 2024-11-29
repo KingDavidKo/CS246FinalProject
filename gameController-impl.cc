@@ -3,7 +3,7 @@ using namespace std;
 
 const int PIXEL_SIZE = 10;
 
-gameController::gameController(int level, bool textOnly, int seed, string file1, string file2): playerOne {Player(level, file1)}, playerTwo {Player(level, file2)} {
+gameController::gameController(int level, bool textOnly, int seed, string file1, string file2): playerOne {Player(1, level, file1)}, playerTwo {Player(2, level, file2)} {
     // Arguments
     this->level = level;
     this->textOnly = textOnly;
@@ -218,7 +218,7 @@ void gameController::render() {
     for (auto child : currentPlayer->nextBlock->getCells()) {
             grid[child->getGridY()-2][child->getGridX()] = child->getLetter();
     }
-    if (currentPlayer == &playerOne) {
+    if (currentPlayer == &playerOne) { // we can also check playerNum here
         
         
         for (int i = 0; i < 2; i++) {

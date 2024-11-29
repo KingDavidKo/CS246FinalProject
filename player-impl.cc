@@ -1,15 +1,16 @@
 #include "player.h"
 
 
-Player::Player(int level, string filename): grid {new Grid()} {
+Player::Player(int playerNum, int level, string filename): playerNum{playerNum}, grid {new Grid()} {
     text = make_shared<TextObserver>(0, 18, 0, 11, grid);
     //graphics = make_shared<GraphicsObserver>(0, 18, 0, 11, grid);
     this->level = level;
     this->filename = filename;
     updateLevel();
-    grid->setCurrent(playerLevel->generateBlock());
+    if (playerNum == 1) {
+        this->grid->setCurrent(playerLevel->generateBlock());
+    }
     this->nextBlock = playerLevel->generateBlock();
-    
     this->score = 0;
     this->blind = false;
     this->heavy = false;

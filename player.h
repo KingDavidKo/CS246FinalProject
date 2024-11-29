@@ -10,7 +10,7 @@ using namespace std;
 class Player {
     int maxlevel = 4;
     int minlevel = -1;
-    
+    int playerNum;
     int level;
     string filename;
     public:
@@ -20,11 +20,9 @@ class Player {
         bool blind;
         bool heavy;
         bool force;
-        
-        
         shared_ptr<TextObserver> text;
         shared_ptr<GraphicsObserver> graphics;
-        Player(int level, string filename);
+        Player(int playerNum, int level, string filename);
         int returnLevel();
         void incrementLevel();
         void decrementLevel();
