@@ -1,4 +1,6 @@
 #include "gameController.h"
+#include <iostream>
+#include <string>
 
 int main(int argc, char const *argv[]) {
     int level = 0;
@@ -28,5 +30,3 @@ int main(int argc, char const *argv[]) {
     game.run();
     return 0;
 }
-
-
