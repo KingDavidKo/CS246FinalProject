@@ -1,10 +1,11 @@
+
 #include "cell.h"
 
 using namespace std;
 
 
 // note: each Cell should have their own shared_ptr
-Cell::Cell(int x, int y, shared_ptr<Block> parent): x {x}, y {y}, parent {parent} {
+Cell::Cell(int x, int y, Block* parent): x {x}, y {y}, parent {parent} {
 	letter = parent->getLetter();
 	grid_x = x; // default
 	grid_y = y; // default
@@ -30,7 +31,10 @@ void Cell::reverseCols(){
 Cell::~Cell(){
 	parent->removeCell(this);
 	
-	if (parent->numCells() == 0) parent.reset();
+	
+	
+	//if (parent->numCells() == 0) parent.reset();
+	
 	// if the parent Block has no more cells (like all have been cleared), then it should be deleted
 	// otherwise, the parent Block should not be deleted
 }
@@ -84,5 +88,9 @@ int Cell::getGridY(){
 
 char Cell::getLetter(){
 	return letter;
+}
+
+Block* Cell::getParent(){
+	return parent;	
 }
 

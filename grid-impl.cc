@@ -1,3 +1,4 @@
+
 #include "grid.h"
 #include "cell.h"
 #include <vector>
@@ -232,7 +233,7 @@ void Grid::moveBlock(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW){
 		
 		
 		cells[y][x] = unique_ptr<Cell>(cell);
-		cout << "coords of new cell -- y: " << y << ", x:" << x << endl; 
+		//cout << "coords of new cell -- y: " << y << ", x:" << x << endl; 
 
 
      }
@@ -285,6 +286,9 @@ int Grid::clearFullRows(){
 
 	// int rowsLeftToCheck = 4;
 
+
+	// maybe make it y >= rowsCleared, since if one row cleared then no need to check top row for a clear
+
 	for (int y = rows - 1; y >= 0; --y){ // we check the bottom 4 rows, cause only 4 rows can be cleared a at a time max		
 		// each loop iteration checks if the bottom row is full or not
 		bool isFull = true;
@@ -295,8 +299,11 @@ int Grid::clearFullRows(){
 			}
 		}
 		if (isFull) {
+			//cout << "clearing row # " << y << endl;
 
 			for (int x = 0; x < cols; x++){
+				
+
 				cells[y][x].reset(); // releases ownership and deletes the Cell
 				// via our cell implementation, if one of cells cleared was the last cell of a block, then that block will be deleted and removed from the blocksInGrid vector
 			}
@@ -304,10 +311,16 @@ int Grid::clearFullRows(){
 			// now let's shift all of the other rows down as well
 			for (int moveY = y; moveY > 0; moveY--){
 				for(int x = 0; x < cols; ++x) {
-					cells[moveY][x] = std::move(cells[moveY - 1][x]); // move ownership of that cell down one row
-					if (cells[moveY][x]){
+
+					Cell* c = cells[moveY - 1][x].get(); // get the cell pointer
+					cells[moveY - 1][x].release(); // release ownership from the previous position of that cell
+					cells[moveY][x] = unique_ptr<Cell>(c); // move ownership to the cell right below
+
+					if (cells[moveY][x]){ // it may or may not be null
 						cells[moveY][x]->translateGridY(1); // moves the grid_y field down 1 row
 						// adjusts the grid_y coord of that cell
+
+						cells[moveY][x]->getParent()->updateAnchorY(); // updates the Y anchor of the block afer that cell was moved down
 					}
 				}	
 			
@@ -319,18 +332,32 @@ int Grid::clearFullRows(){
 			y++; // we just cleared a line and moves the stuff down, we need to recheck that row to see if the row right above it (which has now been moved into the current row)
 
 		} // end of isFull case
-
 	
 	} // end of line clearing for loop
 	
+	for(auto it = blocksInGrid.begin(); it != blocksInGrid.end();){
+		if(it->get()->numCells() == 0) blocksInGrid.erase(it); // if numcells = 0, then erase it from the blocksInGrid vector
+		else ++it;
+	}
+
+
+
 	// update the block anchors for each block	
 	for (shared_ptr<Block> block : blocksInGrid){
 		block->updateAnchorY();	
 	}
 
+	//cout << "lines cleared: " << linesCleared << endl;
+
 	// update the score
-	int addedpoints = (linesCleared + level) * (linesCleared + level); 
+	int addedpoints = (linesCleared + level) * (linesCleared + level);
+	
+	//cout << "number of points to add: " << addedpoints;
+	
 	addToScore(addedpoints);
+	
+	//cout << "score: " << score;
+	
 	return linesCleared;
 }
 	

@@ -1,3 +1,4 @@
+
 #include <string>
 #include <vector>
 #include "cell.h"
@@ -15,10 +16,10 @@ Block::Block(Grid *g, int x, int y, int levelOfBirth): g {g}, x_anchor {x}, y_an
 
 IBlock::IBlock(Grid *g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 	// inititalize the children cell vector
-	children.push_back(new Cell(0, 3, shared_ptr<IBlock>(this)));
-	children.push_back(new Cell(1, 3, shared_ptr<IBlock>(this)));
-	children.push_back(new Cell(2, 3, shared_ptr<IBlock>(this)));
-	children.push_back(new Cell(3, 3, shared_ptr<IBlock>(this)));
+	children.push_back(new Cell(0, 3, this));
+	children.push_back(new Cell(1, 3, this));
+	children.push_back(new Cell(2, 3, this));
+	children.push_back(new Cell(3, 3, this));
 
 	// add the letter
 	letter= 'I';
@@ -28,62 +29,62 @@ IBlock::IBlock(Grid *g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfB
 
 JBlock::JBlock(Grid *g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 
-	children.push_back(new Cell(0, 2, shared_ptr<JBlock>(this)));
-	children.push_back(new Cell(0, 3, shared_ptr<JBlock>(this)));
-	children.push_back(new Cell(1, 3, shared_ptr<JBlock>(this)));
-	children.push_back(new Cell(2, 3, shared_ptr<JBlock>(this)));
+	children.push_back(new Cell(0, 2, this));
+	children.push_back(new Cell(0, 3, this));
+	children.push_back(new Cell(1, 3, this));
+	children.push_back(new Cell(2, 3, this));
 	
 	letter = 'J';
 }
 
 LBlock::LBlock(Grid *g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 
-	children.push_back(new Cell(0, 3, shared_ptr<LBlock>(this)));
-	children.push_back(new Cell(1, 3, shared_ptr<LBlock>(this)));
-	children.push_back(new Cell(2, 3, shared_ptr<LBlock>(this)));
-	children.push_back(new Cell(2, 2, shared_ptr<LBlock>(this)));
+	children.push_back(new Cell(0, 3, this));
+	children.push_back(new Cell(1, 3, this));
+	children.push_back(new Cell(2, 3, this));
+	children.push_back(new Cell(2, 2, this));
 
 	letter = 'L';
 }
 
 OBlock::OBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
-	children.push_back(new Cell(0, 2, shared_ptr<OBlock>(this)));
-	children.push_back(new Cell(0, 3, shared_ptr<OBlock>(this)));
-	children.push_back(new Cell(1, 2, shared_ptr<OBlock>(this)));
-	children.push_back(new Cell(1, 3, shared_ptr<OBlock>(this)));
+	children.push_back(new Cell(0, 2, this));
+	children.push_back(new Cell(0, 3, this));
+	children.push_back(new Cell(1, 2, this));
+	children.push_back(new Cell(1, 3, this));
 
 	letter = 'O';
 }
 
 SBlock::SBlock(Grid *g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 
-	children.push_back(new Cell(0, 3, shared_ptr<SBlock>(this)));
-	children.push_back(new Cell(1, 3, shared_ptr<SBlock>(this)));
-	children.push_back(new Cell(1, 2, shared_ptr<SBlock>(this)));
-	children.push_back(new Cell(2, 2, shared_ptr<SBlock>(this)));
+	children.push_back(new Cell(0, 3, this));
+	children.push_back(new Cell(1, 3, this));
+	children.push_back(new Cell(1, 2, this));
+	children.push_back(new Cell(2, 2, this));
 	letter = 'S';
 }
 
 TBlock::TBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
 
-	children.push_back(new Cell(0, 2, shared_ptr<TBlock>(this)));
-	children.push_back(new Cell(1, 2, shared_ptr<TBlock>(this)));
-	children.push_back(new Cell(1, 3, shared_ptr<TBlock>(this)));
-	children.push_back(new Cell(2, 2, shared_ptr<TBlock>(this)));
+	children.push_back(new Cell(0, 2, this));
+	children.push_back(new Cell(1, 2, this));
+	children.push_back(new Cell(1, 3, this));
+	children.push_back(new Cell(2, 2, this));
 	letter = 'T';
 }
 
 ZBlock::ZBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
 
-	children.push_back(new Cell(0, 2, shared_ptr<ZBlock>(this)));
-	children.push_back(new Cell(1, 2, shared_ptr<ZBlock>(this)));
-	children.push_back(new Cell(1, 3, shared_ptr<ZBlock>(this)));
-	children.push_back(new Cell(2, 3, shared_ptr<ZBlock>(this)));
+	children.push_back(new Cell(0, 2, this));
+	children.push_back(new Cell(1, 2, this));
+	children.push_back(new Cell(1, 3, this));
+	children.push_back(new Cell(2, 3, this));
 	letter = 'Z';
 }
 
 SingleBlock::SingleBlock(Grid *g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} { // DOn't need levelOfBirht since permanent
-	children.push_back(new Cell(x, y, shared_ptr<SingleBlock>(this)));
+	children.push_back(new Cell(x, y, this));
 	letter = '*';
 }
 
@@ -229,7 +230,9 @@ void Block::setAnchors(int newxanch, int newyanch){
 
 Block::~Block(){
 	// remove itself from the grid
-	g->removeBlock(this);
+	//g->removeBlock(this);
+	// dealt with using shared_ptr
+
 
 	// if the block didn't die of old age, then it was cleared, and we increment the grid's score
 	if (!blockDied){
