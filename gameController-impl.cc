@@ -2,6 +2,8 @@
 using namespace std;
 
 const int PIXEL_SIZE = 10;
+const int GRAPHIC_ROW_SIZE = 18;
+const int GRAPHIC_COL_SIZE = 22;
 
 gameController::gameController(int level, bool textOnly, int seed, string file1, string file2): playerOne {Player(1, level, file1)}, playerTwo {Player(2, level, file2)} {
     // Arguments
@@ -13,7 +15,7 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
     opponent = &playerTwo;
     vector<string> blocks = {"I", "J", "L", "O", "S", "Z", "T"};
     this->blocks = blocks;
-    window = nullptr;
+    this->window = new Xwindow(GRAPHIC_COL_SIZE*PIXEL_SIZE, GRAPHIC_ROW_SIZE*PIXEL_SIZE);
 
     if (seed >= 0) {
         srand(seed);
@@ -248,7 +250,6 @@ void gameController::render() {
     ///////
     
     if (!textOnly) {
-        
         if (window) {
             for (int i = 0; i <= 18; ++i) {
                 char chr;

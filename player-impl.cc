@@ -3,7 +3,6 @@
 
 Player::Player(int playerNum, int level, string filename): playerNum{playerNum}, grid {new Grid()} {
     text = make_shared<TextObserver>(0, 18, 0, 11, grid);
-    //graphics = make_shared<GraphicsObserver>(0, 18, 0, 11, grid);
     this->level = level;
     this->filename = filename;
     updateLevel();
