@@ -170,7 +170,7 @@ void gameController::multipleCommmandHandler(string result) {
 
 void gameController::render() {
     cout << "Level:\t" << playerOne.returnLevel() << "\t" << "Level:\t" << playerTwo.returnLevel() << endl;
-    cout << "Score:\t" << playerOne.score << "\t" << "Score:\t" << playerTwo.score << endl;
+    cout << "Score:\t" << playerOne.grid->getScore() << "\t" << "Score:\t" << playerTwo.grid->getScore() << endl;
     
     for (int i = 0; i < 18; i++) {
 
