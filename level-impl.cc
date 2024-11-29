@@ -3,7 +3,7 @@
 
 Level::Level(Grid *g): g {g}, moves {0} {}
 
-std::shared_ptr<Block> Level::createBlock(char type, int x, int y) {
+std::shared_ptr<Block> Level::createBlock(char type) {
     switch(type) {
         case 'I':
             return std::make_shared<IBlock>(g);
@@ -20,7 +20,7 @@ std::shared_ptr<Block> Level::createBlock(char type, int x, int y) {
         case 'Z':
             return std::make_shared<ZBlock>(g);
         case '*':
-            return std::make_shared<SingleBlock>(g, x, y);
+            return std::make_shared<SingleBlock>(g, 5, 3);
     }
     return nullptr;
 }
@@ -71,28 +71,11 @@ Level4::Level4(Grid *g): Level(g) {}
 
 
 shared_ptr<Block> Level4::generateBlock() {
-    vector<pair<int, int>> emptyCoords;
-
-
-    // what is this for
-    /*
-    if (moves != 0 && moves % 5 == 0) {
-        for (int i = 3; i < 18; i++) {
-            for (int j = 0; j < 15; j++) {
-                if (!(g->cells[i][j])) { // Find empty spot
-                    emptyCoords.emplace_back(i,j);
-                }
-            }
-        }
-    }*/
-    if (g->getBlocksSinceLastClear() == 5){ // * block debuff is on, since it's level 4
+    if (g->getBlocksSinceLastClear() % 5 == 0 && g->getBlocksSinceLastClear() != 0){ // * block debuff is on, since it's level 4
         cout << "generate a * block" << endl;
-        return this->createBlock('*');
+        g->dropBlock(createBlock('*'));
     }
 
-    int random = rand() % emptyCoords.size();
-
-    //g->addBlock(createBlock('*', emptyCoords[random].first, emptyCoords[random].second));
 
     char arr[9] = {'S', 'S','Z', 'Z','I','J','L','O','T'};
     return this->createBlock(arr[rand() % 9]);

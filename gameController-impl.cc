@@ -60,7 +60,9 @@ void gameController::run() {
     render();
     while (cin >> command) {
         
-        
+        if (currentPlayer->grid->isGameOver()) {
+            return;
+        }
         string result = decipherCommand(command);
         if (result == "restart") {
             // destroy the boards and remake them!
@@ -198,7 +200,8 @@ void gameController::multipleCommmandHandler(string result) {
         // apply drop logic. should be done in a way such that i can continuously call drop a ton of times and nothing happens
         currentPlayer->grid->dropBlock(currentPlayer->grid->returnCurrentBlock());
 
-
+        
+        /*
         // if it's been 5 blocks since last clear and the centre block debuff is on?
         if (currentPlayer->grid->getBlocksSinceLastClear() == 5 && currentPlayer->grid->isCentreBlockDebuffOn()){
             cout << "debuff block time" << endl;
@@ -208,7 +211,7 @@ void gameController::multipleCommmandHandler(string result) {
             currentPlayer->incrementLevel();
             currentPlayer->incrementLevel();
 
-            
+
 
             currentPlayer->grid->setCurrent(currentPlayer->playerLevel->generateBlock()); // gets a * block from generate block
             cout << "after segfault" << endl;
@@ -224,14 +227,14 @@ void gameController::multipleCommmandHandler(string result) {
             currentPlayer->grid->dropBlock(currentPlayer->grid->returnCurrentBlock());
 
 
-        }
+        }*/
 
 
         Player * temp = currentPlayer;
         currentPlayer = opponent;
         opponent = temp;
         
-        opponent->grid->setCurrent(currentPlayer->nextBlock);
+        opponent->grid->setCurrent(opponent->nextBlock);
         currentPlayer->nextBlock = currentPlayer->playerLevel->generateBlock();
         
     }
