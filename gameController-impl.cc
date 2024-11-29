@@ -3,7 +3,7 @@ using namespace std;
 
 const int PIXEL_SIZE = 10;
 const int GRAPHIC_ROW_SIZE = 18;
-const int GRAPHIC_COL_SIZE = 22;
+const int GRAPHIC_COL_SIZE = 11;
 
 gameController::gameController(int level, bool textOnly, int seed, string file1, string file2): playerOne {Player(1, level, file1)}, playerTwo {Player(2, level, file2)} {
     // Arguments
@@ -15,7 +15,13 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
     opponent = &playerTwo;
     vector<string> blocks = {"I", "J", "L", "O", "S", "Z", "T"};
     this->blocks = blocks;
-    this->window = new Xwindow(GRAPHIC_COL_SIZE*PIXEL_SIZE, GRAPHIC_ROW_SIZE*PIXEL_SIZE);
+    if (textOnly){
+        this->window = new Xwindow(2*GRAPHIC_COL_SIZE*PIXEL_SIZE, GRAPHIC_ROW_SIZE*PIXEL_SIZE);
+    }
+    else{
+        this->window = nullptr;
+    }
+     
 
     if (seed >= 0) {
         srand(seed);
@@ -110,39 +116,83 @@ void gameController::matchMultiplied(string result, int multiplier) {
     // now notify
 }
 
+void gameController::levelHeavy(){
+    if (currentPlayer->grid->isLevelHeavy()){
+        // if we can move it down 1, we move it down 1
+        if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 0, 1, 0, 0)){
+            currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 0, 1, 0, 0);
+        } 
+    }
+}
+
+void gameController::specialHeavy(){
+// heavy special action check
+    if (currentPlayer->grid->isHeavy()){
+                
+        // if we can move it down two rows
+        if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 0, 2, 0, 0)){
+            currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 0, 2, false, false);
+                
+        }
+        else{ // otherwise, we drop it
+            multipleCommmandHandler("drop");
+        }
+    }
+
+}
+
 void gameController::multipleCommmandHandler(string result) {
     if (result == "left") {
         // apply left
         if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), -1, 0, false, false)) {
             currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), -1, 0, false, false);
+ 
         }
+        // level heavy check and application
+        levelHeavy();
+
+        // special heavy check and application
+        specialHeavy();
     }
     else if (result == "right") {
         // apply right
         if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 1, 0, false, false)) {
             currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 1, 0, false, false);
+
+            
         }
+        // level heavy check and application
+        levelHeavy();
+
+        // special heavy check and application
+        specialHeavy();
 
     }
     else if (result == "down") {
         // apply down
         if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 0, 1, false, false)) {
-            cout << "down is valid" << endl;
+            ///cout << "down is valid" << endl;
 
             currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 0, 1, false, false);
+            
         }
+        // level heavy check and application
+        levelHeavy();
     }
     else if (result == "clockwise") {
         // apply clockwise
         if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 0, 0, true, false)) {
             currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 0, 0, true, false);
         }
+        // level heavy check and application
+        levelHeavy();
     }
     else if (result =="counterclockwise") {
         // apply counterclockwise
         if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 0, 0, false, true)) {
             currentPlayer->grid->moveBlock(currentPlayer->grid->returnCurrentBlock(), 0, 0, false, true);
-        }
+        }// level heavy check and application
+        levelHeavy();
     }
     else if (result == "drop") {
         // apply drop logic. should be done in a way such that i can continuously call drop a ton of times and nothing happens

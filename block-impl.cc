@@ -233,10 +233,14 @@ Block::~Block(){
 	//g->removeBlock(this);
 	// dealt with using shared_ptr
 
-
+	
+	
 	// if the block didn't die of old age, then it was cleared, and we increment the grid's score
 	if (!blockDied){
+		
 		int scoreAdd = (levelOfBirth + 1) * (levelOfBirth + 1);
+		
+		
 		g->addToScore(scoreAdd);
 	// increment the score of the grid appropriately
 	// if they've been cleared

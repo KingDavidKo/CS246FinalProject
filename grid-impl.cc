@@ -13,8 +13,14 @@ Grid::Grid(): currentBlock {nullptr} { // this is just so we have something ther
         }
     }
 	this->blind = false;
-	this->heavy = false;
 
+
+	this->heavy = false; 
+	// MAY BE SET TO TRUE FOR TESTING PURPOSES
+
+
+	this->levelHeavy = false;
+	// MAY BE SET TRUE FOR TESTING PURPOSES
 }
 
 // sets the current block in the starting position
@@ -238,6 +244,8 @@ void Grid::moveBlock(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW){
 
      }
 
+	 
+
 
 }
 
@@ -386,6 +394,12 @@ void Grid::addToScore(int s){
 }
 void Grid::setLevel(int newlevel){
 	level = newlevel;
+	if (level >= 3){
+		levelHeavy = true;
+	}
+	if (level == 4){
+		centreBlockOn = true;
+	}
 }
 
 
@@ -400,3 +414,4 @@ void Grid::setHeavy(bool isHeavy){
 
 bool Grid::isBlind() { return blind;}
 bool Grid::isHeavy() { return heavy; }
+bool Grid::isLevelHeavy() { return levelHeavy; }

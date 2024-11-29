@@ -41,11 +41,18 @@ class Grid  : public Subject {
 	
 
     bool blind, heavy; // don't think we need a bool for the force debuff
+	// these are bools for the heavy and blind special actions
+	
     bool gameOver;
 
-
+	
     // add int blocksSinceLastDrop, bool level3, bool level4 later
     
+	bool levelHeavy; // used for level 3 and 4
+
+	bool centreBlockOn; // used for level 4
+
+
     int clearFullRows();
     
     public:
@@ -83,6 +90,7 @@ class Grid  : public Subject {
 
 	bool isBlind();
 	bool isHeavy();
+	bool isLevelHeavy();
 
 	~Grid();
 };
