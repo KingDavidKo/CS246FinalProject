@@ -1,8 +1,8 @@
 #include "player.h"
 
 
-Player::Player(int playerNum, int level, string filename): playerNum{playerNum}, grid {new Grid()} {
-    text = make_shared<TextObserver>(0, 18, 0, 11, grid);
+Player::Player(int playerNum, int level, string filename): playerNum{playerNum}, grid {make_unique<Grid>()} {
+    // text = make_shared<TextObserver>(0, 18, 0, 11, grid);
     this->level = level;
     this->filename = filename;
     updateLevel();

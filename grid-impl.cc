@@ -31,7 +31,7 @@ void Grid::setCurrent(shared_ptr<Block> block) {
     // the last "current block" should alr be in the Blocks vector, so it's safe to reassign the pointer
     currentBlock = block;
 
-    vector<Cell*> blockCells = currentBlock->getCells();
+    vector<Cell*>& blockCells = currentBlock->getCells();
     //currentBlock->setXAnchor(0);
     //currentBlock->setYAnchor(3);
 	currentBlock->setAnchors(0,3);

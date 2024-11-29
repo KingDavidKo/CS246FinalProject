@@ -14,14 +14,14 @@ class Player {
     int level;
     string filename;
     public:
-        Grid * grid;
+        shared_ptr<Grid> grid;
         unique_ptr<Level> playerLevel;
         int score;
         bool blind;
         bool heavy;
         bool force;
-        shared_ptr<TextObserver> text;
-        shared_ptr<GraphicsObserver> graphics;
+        // shared_ptr<TextObserver> text;
+        // shared_ptr<GraphicsObserver> graphics;
         Player(int playerNum, int level, string filename);
         int returnLevel();
         void incrementLevel();

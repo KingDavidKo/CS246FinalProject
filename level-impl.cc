@@ -1,7 +1,7 @@
 
 #include "level.h"
 
-Level::Level(Grid *g): g {g}, moves {0} {}
+Level::Level(shared_ptr<Grid> g): g {g}, moves {0} {}
 
 std::shared_ptr<Block> Level::createBlock(char type, int level) {
     switch(type) {
@@ -25,7 +25,7 @@ std::shared_ptr<Block> Level::createBlock(char type, int level) {
     return nullptr;
 }
 
-Level0::Level0(string file, Grid *g): Level(g), f {file}, filename {file} {} //be careful of closing RAII
+Level0::Level0(string file, shared_ptr<Grid>g): Level(g), f {file}, filename {file} {} //be careful of closing RAII
 
 
 std::shared_ptr<Block> Level0::generateBlock() {
@@ -40,7 +40,7 @@ std::shared_ptr<Block> Level0::generateBlock() {
     
 }
 
-Level1::Level1(Grid *g): Level(g) {}
+Level1::Level1(shared_ptr<Grid>g): Level(g) {}
 
 
 shared_ptr<Block> Level1::generateBlock() {
@@ -49,7 +49,7 @@ shared_ptr<Block> Level1::generateBlock() {
 
 }
 
-Level2::Level2(Grid *g): Level(g) {}
+Level2::Level2(shared_ptr<Grid>g): Level(g) {}
 
 
 shared_ptr<Block> Level2::generateBlock() {
@@ -58,7 +58,7 @@ shared_ptr<Block> Level2::generateBlock() {
 }
 
 
-Level3::Level3(Grid *g): Level(g) {}
+Level3::Level3(shared_ptr<Grid>g): Level(g) {}
 
 
 shared_ptr<Block> Level3::generateBlock() {
@@ -67,7 +67,7 @@ shared_ptr<Block> Level3::generateBlock() {
 }
 
 
-Level4::Level4(Grid *g): Level(g) {}
+Level4::Level4(shared_ptr<Grid>g): Level(g) {}
 
 
 shared_ptr<Block> Level4::generateBlock() {
