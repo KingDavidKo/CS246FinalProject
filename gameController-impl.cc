@@ -1,6 +1,8 @@
 #include "gameController.h"
 using namespace std;
 
+const int PIXEL_SIZE = 10;
+
 gameController::gameController(int level, bool textOnly, int seed, string file1, string file2): playerOne {Player(level, file1)}, playerTwo {Player(level, file2)} {
     // Arguments
     this->level = level;
@@ -144,6 +146,9 @@ void gameController::multipleCommmandHandler(string result) {
         currentPlayer = opponent;
         opponent = temp;
         
+        opponent->grid->setCurrent(currentPlayer->nextBlock);
+        currentPlayer->nextBlock = currentPlayer->playerLevel->generateBlock();
+        
     }
     else if (result == "levelup") {
         // apply levelup
@@ -215,14 +220,26 @@ void gameController::render() {
     ///////
     // Print next block here
     ///////
-    /*
+    
     if (!textOnly) {
-
+        /*
         if (window) {
-            for (int row = 0; row <= 18; ++row) {
-                for (int col = 0; col <= 11; ++col) {
+            for (int i = 0; i <= 18; ++i) {
+                char chr;
+                for (int j = 0; j <= 11; ++j) {
                     
-                    char chr = playerOne->getState(row, col);
+                    if (j+1 >= 3 && j+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerOne.grid->isBlind()) {
+                        chr = '?';
+                        
+                        
+                    } else if(!playerTwo.grid->cells[i][j]){ // blank cell
+                        chr = ' ';
+                    }
+                    else{
+                        chr = playerTwo.grid->cells[i][j]->getLetter();
+                    }
+                    
+                    //char chr = playerOne->getState(row, col);
                     int color = Xwindow::Black; // by default black
 
                     if (chr >= 'a' && chr <= 'z') {
@@ -254,9 +271,10 @@ void gameController::render() {
                     window->fillRectangle((col - left) * PIXEL_SIZE, (row - top) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
             }
-        }
+            
+        }*/
         return;
-    }*/
+    }
 }
 
 string gameController::fileParse(string fileName) {
