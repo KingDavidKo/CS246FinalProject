@@ -249,10 +249,8 @@ void gameController::render() {
         for (int j = 0; j < 11; j++) {
 
 
-            if (j+1 >= 3 && j+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerOne.grid->isBlind()) {
-                cout << '?';
-                
-                
+            if (i+1 >= 3 && i+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerTwo.grid->isBlind()) {
+                cout << '?';    
             } else if(!playerTwo.grid->cells[i][j]){ // blank cell
 			    cout << ' ';
             }
@@ -301,19 +299,19 @@ void gameController::render() {
     
     if (!textOnly) {
         if (window) {
-            for (int i = 0; i <= 18; ++i) {
+            for (int i = 0; i < 18; ++i) {
                 char chr;
-                for (int j = 0; j <= 11; ++j) {
+                for (int j = 0; j < 11; ++j) {
                     
-                    if (j+1 >= 3 && j+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerOne.grid->isBlind()) {
+                    if (i+1 >= 3 && i+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerOne.grid->isBlind()) {
                         chr = '?';
                         
                         
-                    } else if(!playerTwo.grid->cells[i][j]){ // blank cell
+                    } else if(!playerOne.grid->cells[i][j]){ // blank cell
                         chr = ' ';
                     }
                     else{
-                        chr = playerTwo.grid->cells[i][j]->getLetter();
+                        chr = playerOne.grid->cells[i][j]->getLetter();
                     }
                     
                     //char chr = playerOne->getState(row, col);
@@ -330,9 +328,9 @@ void gameController::render() {
                     }                
                     window->fillRectangle(j * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
-                for (int j = 0; j <= 11; ++j) {
+                for (int j = 0; j < 11; ++j) {
                     
-                    if (j+1 >= 3 && j+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerOne.grid->isBlind()) {
+                    if (i+1 >= 3 && i+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerTwo.grid->isBlind()) {
                         chr = '?';
                         
                         
@@ -354,14 +352,15 @@ void gameController::render() {
                     } else if (chr == ' ') {
                         color = Xwindow::White; // white
                     }                
-                    window->fillRectangle(j * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
+                    window->fillRectangle((GRAPHIC_COL_SIZE + j) * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
             }
             
         }
-        return;
     }
+    return;
 }
+
 
 string gameController::fileParse(string fileName) {
     ifstream in {fileName};
