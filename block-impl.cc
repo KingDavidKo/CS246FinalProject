@@ -255,6 +255,7 @@ Block::~Block(){
 	// if they've been cleared
 	}
 
+	
 }
 bool Block::containsCoords(int x, int y) {
 	bool hasCoords = false;

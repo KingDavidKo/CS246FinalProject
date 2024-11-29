@@ -378,9 +378,12 @@ void gameController::render() {
                     else{
                         color = Xwindow::Black;   // red
                     }                      
-                    window->fillRectangle(j * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
+                    window->fillRectangle(j * PIXEL_SIZE, (i+2) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
-                
+                window->drawString(5, 0 * PIXEL_SIZE+ 10, "Level: " + to_string(playerOne.returnLevel()));
+                window->drawString(window->getWidth()/2 + 5, 0 * PIXEL_SIZE + 10, "Level: " + to_string(playerTwo.score));
+                window->drawString(5, 1 * PIXEL_SIZE + 10, "Score: " + to_string(playerOne.score));
+                window->drawString(window->getWidth()/2 + 5, 1 * PIXEL_SIZE + 10, "Score: " + to_string(playerTwo.score));
                 for (int j = 0; j < 11; ++j) {
                     
                     if (i+1 >= 3 && i+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerTwo.grid->isBlind()) {
@@ -416,12 +419,12 @@ void gameController::render() {
                     else{
                         color = Xwindow::Black;   // red
                     }         
-                    window->fillRectangle((GRAPHIC_COL_SIZE + j) * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
+                    window->fillRectangle((GRAPHIC_COL_SIZE + j) * PIXEL_SIZE, (i+2) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
                 //window->drawString(0, 18 * PIXEL_SIZE, "-----------\t-----------"); // update window
                 window->fillRectangle(0, 19 * PIXEL_SIZE, window->getWidth(), 2, Xwindow::Black);
-                window->drawString(5, 20 * PIXEL_SIZE+ 2, "Next:");
-                window->drawString(window->getWidth()/2 + 5, 20 * PIXEL_SIZE + 2, "Next:");
+                window->drawString(5, 22 * PIXEL_SIZE+ 2, "Next:");
+                window->drawString(window->getWidth()/2 + 5, 22 * PIXEL_SIZE + 2, "Next:");
                 //window->drawString(window->getWidth()/2, 20 * PIXEL_SIZE, "-----------\t-----------");
         char grid[2][4] =  { {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '} };
         for (auto child : currentPlayer->nextBlock->getCells()) {
@@ -459,7 +462,7 @@ void gameController::render() {
                     else{
                         color = Xwindow::Black;   // red
                     }                    
-                    window->fillRectangle(j * PIXEL_SIZE, (21 +i) * PIXEL_SIZE + 2, PIXEL_SIZE, PIXEL_SIZE, color);
+                    window->fillRectangle(j * PIXEL_SIZE, (23 +i) * PIXEL_SIZE + 2, PIXEL_SIZE, PIXEL_SIZE, color);
                 }
             }
                 
@@ -493,7 +496,7 @@ void gameController::render() {
                     else{
                         color = Xwindow::Black;   // red
                     }             
-                    window->fillRectangle(j * PIXEL_SIZE + window->getWidth()/2 + 5, (21 +i) * PIXEL_SIZE + 2, PIXEL_SIZE, PIXEL_SIZE, color);
+                    window->fillRectangle(j * PIXEL_SIZE + window->getWidth()/2 + 5, (23 +i) * PIXEL_SIZE + 2, PIXEL_SIZE, PIXEL_SIZE, color);
                 }
             }
             

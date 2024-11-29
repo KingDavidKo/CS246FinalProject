@@ -5,7 +5,7 @@
 int main(int argc, char const *argv[]) {
     int level = 0;
     int seed = -1;
-    bool textOnly = true;
+    bool textOnly = false;
     std::string scriptFile1 = "sequence1.txt";
     std::string scriptFile2 = "sequence2.txt";
 

@@ -44,7 +44,7 @@ class Block {
         void move(string dir);
         void rotateCW();
         void rotateCCW();
-	virtual ~Block(); // this can be implemented, idk what method to make virtual for this abtract class
+    ~Block(); // this can be implemented, idk what method to make virtual for this abtract class
 	
 	void resetState(const std::vector<std::pair<int, int>>& originalCoords, int originalAnchorX, int originalAnchorY);
 
