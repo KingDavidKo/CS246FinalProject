@@ -478,7 +478,7 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
             cin >> newName;
             renameCommand(prevName, newName);
             }
-        }
+    }
     else if (result == "sequence") {
         if (readingFromFile) {
             return result;
