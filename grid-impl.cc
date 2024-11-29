@@ -257,21 +257,23 @@ bool Grid::dropBlock(shared_ptr<Block> b){
 	bool restorelevelheavy = false;
 	bool restorespecialheavy = false;
 
-	if (b->getLetter() == '*'){
-		//cout << "wow look its a * block" << endl;
-		
-		if (levelHeavy){
-			//cout <<"level is heavy is on" << endl;
+	if (b){ // if b not null
+		if (b->getLetter() == '*'){
+			//cout << "wow look its a * block" << endl;
 			
-			levelHeavy = false;
-			restorelevelheavy = true;
+			if (levelHeavy){
+				//cout <<"level is heavy is on" << endl;
+				
+				levelHeavy = false;
+				restorelevelheavy = true;
+			}
+			if (heavy){
+				heavy  = false;
+				restorespecialheavy = true;
+			}
+			// cout <<"coords of x: " << b->getXAnchor() << ", y:" << b->getYAnchor() << endl;
+			// cout << "the coords of its cell: x: " << b->getCells()[0]->getGridX() << ", y: " << b-> getYAnchor() << endl;
 		}
-		if (heavy){
-			heavy  = false;
-			restorespecialheavy = true;
-		}
-		// cout <<"coords of x: " << b->getXAnchor() << ", y:" << b->getYAnchor() << endl;
-		// cout << "the coords of its cell: x: " << b->getCells()[0]->getGridX() << ", y: " << b-> getYAnchor() << endl;
 	}
 	
 
@@ -331,13 +333,15 @@ bool Grid::dropBlock(shared_ptr<Block> b){
 		
 	// }
 
-	currentBlock = nullptr; // we dropped the block -- it's no longer the current block
+	// since we never set the * blocks to current, we need to add them like this
+	if (b->getLetter() == '*') blocksInGrid.emplace_back(b);
+	else currentBlock = nullptr; // we dropped the block -- it's no longer the current block (only applicable if not *)
 
 	
 
-	if (cells[17][5]){ // if not null
-		cout << "letter at 5th col and 17th row" << cells[17][5]->getLetter() << endl;
-	}
+	// if (cells[17][5]){ // if not null
+	// 	cout << "letter at 5th col and 17th row: " << cells[17][5]->getLetter() << endl;
+	// }
 
 	if (linescleared >= 2) return true;
 	else return false;
