@@ -121,6 +121,8 @@ void gameController::matchMultiplied(string result, int multiplier) {
 }
 
 void gameController::levelHeavy(){
+
+    // if it's a '*', then heavy doesn't apply
     if (currentPlayer->grid->isLevelHeavy()){
         // if we can move it down 1, we move it down 1
         if (currentPlayer->grid->isValidMove(currentPlayer->grid->returnCurrentBlock(), 0, 1, 0, 0)){
@@ -131,6 +133,8 @@ void gameController::levelHeavy(){
 
 void gameController::specialHeavy(){
 // heavy special action check
+
+    // if it's a '*', then heavy doesn't apply
     if (currentPlayer->grid->isHeavy()){
                 
         // if we can move it down two rows
@@ -142,6 +146,7 @@ void gameController::specialHeavy(){
             multipleCommmandHandler("drop");
         }
     }
+    
 
 }
 
@@ -301,7 +306,8 @@ void gameController::render() {
     cout << "-----------\t-----------" << endl;
     cout << "Next:      \tNext:      " << endl;
 
-    char grid[2][4] = {' '};
+    //char grid[2][4] = {' '};
+    char grid[2][4] =  { {' ', ' ', ' ', ' '}, {' ', ' ', ' ', ' '} };
     for (auto child : currentPlayer->nextBlock->getCells()) {
             grid[child->getGridY()-2][child->getGridX()] = child->getLetter();
     }

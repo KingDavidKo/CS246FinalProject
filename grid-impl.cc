@@ -254,9 +254,31 @@ void Grid::moveBlock(shared_ptr<Block> b, int dx, int dy, bool CW, bool CCW){
 
 // drop some block (usually the current block but it can vary)
 bool Grid::dropBlock(shared_ptr<Block> b){
+	bool restorelevelheavy = false;
+	bool restorespecialheavy = false;
+
+	if (b->getLetter() == '*'){
+		cout << "wow look its a * block" << endl;
+		
+		if (levelHeavy){
+			cout <<"level is heavy is on" << endl;
+			
+			levelHeavy = false;
+			restorelevelheavy = true;
+		}
+		if (heavy){
+			heavy  = false;
+			restorespecialheavy = true;
+		}
+		cout <<"coords of x: " << b->getXAnchor() << ", y:" << b->getYAnchor() << endl;
+	}
 	
+
+
 	while(isValidMove(b, 0, 1, false, false)) { // moving one down
 		moveBlock(b, 0, 1, false, false); // if you can move the block down one, then move it down one
+
+		if (b->getLetter() == '*') cout <<"coords of x: " << b->getXAnchor() << ", y:" << b->getYAnchor() << endl;
 			
 	}
 	// go until you can't move it down any more
@@ -272,7 +294,9 @@ bool Grid::dropBlock(shared_ptr<Block> b){
 		blocksSinceLastClear++; // otherwise we are 1 more block since last clear
 	}
 
+	if (b->getLetter() == '*') cout <<"coords of x: " << b->getXAnchor() << ", y:" << b->getYAnchor() << endl;
 
+	
 	// check if any blocks are dead,
 	// if they are, then try to go row by row to drop the blocks of ever cell
 	// idk ask about whether this is bonus or not
@@ -280,8 +304,13 @@ bool Grid::dropBlock(shared_ptr<Block> b){
 	
 
 	// since we just dropped a block, turn off special actions if they were on
-	if (blind) blind = false;
-	if (heavy) heavy = false;
+	if (blind ) blind = false;
+	if (heavy && b->getLetter() != '*') heavy = false;
+
+
+	// if we had a '*' block, we restore the heavy here
+	if (restorelevelheavy) levelHeavy = true;
+	if (restorespecialheavy) heavy = true;
 
 
 	// THE CURRENT BLOCK SHOULD ALREADY BE IN THE BLOCKS VECTOR,

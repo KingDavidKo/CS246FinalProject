@@ -247,7 +247,7 @@ Block::~Block(){
 		int scoreAdd = (levelOfBirth + 1) * (levelOfBirth + 1);
 		
 		
-		g->addToScore(scoreAdd);
+		g->addToScore(scoreAdd);	
 	// increment the score of the grid appropriately
 	// if they've been cleared
 	}
