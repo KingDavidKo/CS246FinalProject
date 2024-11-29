@@ -13,6 +13,7 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
     opponent = &playerTwo;
     vector<string> blocks = {"I", "J", "L", "O", "S", "Z", "T"};
     this->blocks = blocks;
+    window = nullptr;
 
     if (seed >= 0) {
         srand(seed);
@@ -214,7 +215,7 @@ void gameController::render() {
     cout << "Next:      \tNext:      " << endl;
 
     char grid[2][4] = {' '};
-    for (auto child : currentPlayer->nextBlock->children) {
+    for (auto child : currentPlayer->nextBlock->getCells()) {
             grid[child->getGridY()-2][child->getGridX()] = child->getLetter();
     }
     if (currentPlayer == &playerOne) {
