@@ -33,19 +33,19 @@ void Player::decrementLevel() {
 void Player::updateLevel() {
     if (level == 0) {
         playerLevel.reset(); // should be reset, not release
-        playerLevel = make_unique<Level0>(filename, grid);
+        playerLevel = make_unique<Level0>(filename, grid.get());
     } else if (level == 1) {
         playerLevel.reset();
-        playerLevel = make_unique<Level1>(grid);
+        playerLevel = make_unique<Level1>(grid.get());
     } else if (level == 2) {
         playerLevel.reset();
-        playerLevel = make_unique<Level2>(grid);
+        playerLevel = make_unique<Level2>(grid.get());
     } else if (level == 3) {
         playerLevel.reset();
-        playerLevel = make_unique<Level3>(grid);
+        playerLevel = make_unique<Level3>(grid.get());
     } else if (level == 4) {
         playerLevel.reset();
-        playerLevel = make_unique<Level4>(grid);
+        playerLevel = make_unique<Level4>(grid.get());
     }
     grid->setLevel(level); // sets the grid's level accordingly
 }

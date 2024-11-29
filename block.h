@@ -22,7 +22,7 @@ class Block {
 
 	vector<Cell*> children; // just a vector of cell pointers, as only the Grid ever needs to free Cell objects
 	
-	shared_ptr<Grid>g; // pointer to that grid
+	Grid* g; // pointer to that grid
 		 // raw pointer as Block isn't freeing grid
 		 // need the pointer to update grid score + remove it from grid vector of blocks if needed
 	int lifetimeCount; // "age" of block
@@ -38,7 +38,7 @@ class Block {
 	bool blockDied;
 
     public:
-        Block(shared_ptr<Grid>g, int x = 0, int y = 0, int levelOfBirth = 0); // Set anchor point
+        Block(Grid * g, int x = 0, int y = 0, int levelOfBirth = 0); // Set anchor point
 			     // don't need defaults as this should never be called
                  // I want to as an empty block for grid's currentBlock (default constructor)
         void move(string dir);
@@ -86,49 +86,49 @@ class Block {
 // default y is 3 cause the default grid anchor is just the internal coords
 class IBlock : public Block {
     public:
-        IBlock(shared_ptr<Grid>g, int x = 0, int y = 3, int levelOfBirth = 0);
+        IBlock(Grid* g, int x = 0, int y = 3, int levelOfBirth = 0);
 	char getLetter() override;    	
 	~IBlock();
 };
 
 class JBlock : public Block {
     public:
-        JBlock(shared_ptr<Grid> g, int x = 0, int y = 3, int levelOfBirth = 0);   
+        JBlock(Grid*  g, int x = 0, int y = 3, int levelOfBirth = 0);   
 	char getLetter() override;
 	~JBlock();
 };
 
 class LBlock : public Block {
     public:
-        LBlock(shared_ptr<Grid>g, int x = 0, int y = 3, int levelOfBirth = 0);
+        LBlock(Grid* g, int x = 0, int y = 3, int levelOfBirth = 0);
 	char getLetter() override;
 	~LBlock();
 };
 
 class OBlock : public Block {
     public:
-        OBlock(shared_ptr<Grid>g, int x = 0, int y = 3, int levelOfBirth = 0);    
+        OBlock(Grid* g, int x = 0, int y = 3, int levelOfBirth = 0);    
 	char getLetter() override;
 	~OBlock();
 };
 
 class SBlock : public Block {
     public:
-        SBlock(shared_ptr<Grid>g, int x = 0, int y = 3, int levelOfBirth = 0);    
+        SBlock(Grid* g, int x = 0, int y = 3, int levelOfBirth = 0);    
 	char getLetter() override;
 	~SBlock();
 };
 
 class TBlock : public Block {
     public:
-        TBlock(shared_ptr<Grid>g, int x = 0, int y = 3, int levelOfBirth = 0);    
+        TBlock(Grid* g, int x = 0, int y = 3, int levelOfBirth = 0);    
 	char getLetter() override;
 	~TBlock();
 };
 
 class ZBlock : public Block {
     public:
-        ZBlock(shared_ptr<Grid>g, int x = 0, int y = 3, int levelOfBirth = 0);    
+        ZBlock(Grid* g, int x = 0, int y = 3, int levelOfBirth = 0);    
 	char getLetter() override;
 	~ZBlock();
 };
@@ -138,7 +138,7 @@ class ZBlock : public Block {
 // maybe the one debuff?
 class SingleBlock : public Block {
     public:
-        SingleBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth = 0);   
+        SingleBlock(Grid* g, int x, int y, int levelOfBirth = 0);   
 		~SingleBlock(); 
 		char getLetter() override;
 };

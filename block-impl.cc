@@ -8,13 +8,13 @@
 using namespace std;
 
 
-Block::Block(shared_ptr<Grid>g, int x, int y, int levelOfBirth): g {g}, x_anchor {x}, y_anchor {y}, levelOfBirth {levelOfBirth} {
+Block::Block(Grid * g, int x, int y, int levelOfBirth): g {g}, x_anchor {x}, y_anchor {y}, levelOfBirth {levelOfBirth} {
 	lifetimeCount = 0;
 	blockDied = false;
 	// rest of fields don't need to be added cause Block should be abstract	
 }
 
-IBlock::IBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
+IBlock::IBlock(Grid* g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 	// inititalize the children cell vector
 	children.push_back(new Cell(0, 3, this));
 	children.push_back(new Cell(1, 3, this));
@@ -27,7 +27,7 @@ IBlock::IBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block{g, x, y
 
 
 
-JBlock::JBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
+JBlock::JBlock(Grid* g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 
 	children.push_back(new Cell(0, 2, this));
 	children.push_back(new Cell(0, 3, this));
@@ -37,7 +37,7 @@ JBlock::JBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block{g, x, y
 	letter = 'J';
 }
 
-LBlock::LBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
+LBlock::LBlock(Grid* g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 
 	children.push_back(new Cell(0, 3, this));
 	children.push_back(new Cell(1, 3, this));
@@ -47,7 +47,7 @@ LBlock::LBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block{g, x, y
 	letter = 'L';
 }
 
-OBlock::OBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
+OBlock::OBlock(Grid* g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
 	children.push_back(new Cell(0, 2, this));
 	children.push_back(new Cell(0, 3, this));
 	children.push_back(new Cell(1, 2, this));
@@ -56,7 +56,7 @@ OBlock::OBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block {g, x, 
 	letter = 'O';
 }
 
-SBlock::SBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
+SBlock::SBlock(Grid* g, int x, int y, int levelOfBirth): Block{g, x, y, levelOfBirth} {
 
 	children.push_back(new Cell(0, 3, this));
 	children.push_back(new Cell(1, 3, this));
@@ -65,7 +65,7 @@ SBlock::SBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block{g, x, y
 	letter = 'S';
 }
 
-TBlock::TBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
+TBlock::TBlock(Grid* g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
 
 	children.push_back(new Cell(0, 2, this));
 	children.push_back(new Cell(1, 2, this));
@@ -74,7 +74,7 @@ TBlock::TBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block {g, x, 
 	letter = 'T';
 }
 
-ZBlock::ZBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
+ZBlock::ZBlock(Grid* g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} {
 
 	children.push_back(new Cell(0, 2, this));
 	children.push_back(new Cell(1, 2, this));
@@ -83,7 +83,7 @@ ZBlock::ZBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block {g, x, 
 	letter = 'Z';
 }
 
-SingleBlock::SingleBlock(shared_ptr<Grid>g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} { // DOn't need levelOfBirht since permanent
+SingleBlock::SingleBlock(Grid* g, int x, int y, int levelOfBirth): Block {g, x, y, levelOfBirth} { // DOn't need levelOfBirht since permanent
 	children.push_back(new Cell(0, 3, this)); // centre column and y=3 as default
 	setAnchors(5, 3); // just set the anchors
 	updateCellCoords();

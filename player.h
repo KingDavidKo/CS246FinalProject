@@ -14,7 +14,7 @@ class Player {
     int level;
     string filename;
     public:
-        shared_ptr<Grid> grid;
+        unique_ptr<Grid> grid;
         unique_ptr<Level> playerLevel;
         int score;
         bool blind;
