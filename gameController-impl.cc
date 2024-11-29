@@ -25,6 +25,8 @@ gameController::gameController(int level, bool textOnly, int seed, string file1,
 
     if (seed >= 0) {
         srand(seed);
+    } else {
+        srand(time(NULL));
     }
 
     // Commands
@@ -315,13 +317,13 @@ void gameController::render() {
             
         
     } else {
-        cout << "\t\t";
+        
         for (int i = 0; i < 2; i++) {
+            cout << "\t\t";
             for (int j = 0; j < 4; j++) {
                 cout << grid[i][j];
             }
             cout << endl;
-            cout << "\t\t";
         }
         
     }
