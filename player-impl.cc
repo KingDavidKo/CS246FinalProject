@@ -7,10 +7,9 @@ Player::Player(int playerNum, int level, string filename): playerNum{playerNum},
     this->level = level;
     this->filename = filename;
     updateLevel();
-    if (playerNum == 1) {
-        this->grid->setCurrent(playerLevel->generateBlock());
-    }
+    grid->setCurrent(playerLevel->generateBlock());
     this->nextBlock = playerLevel->generateBlock();
+    
     this->score = 0;
     this->blind = false;
     this->heavy = false;
