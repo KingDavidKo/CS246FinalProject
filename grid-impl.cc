@@ -18,7 +18,7 @@ Grid::Grid(): currentBlock {nullptr} { // this is just so we have something ther
 	this->heavy = false; 
 	// MAY BE SET TO TRUE FOR TESTING PURPOSES
 
-	this->blind = true; // testing
+	this->blind = false; // testing
 
 	this->levelHeavy = false;
 	// MAY BE SET TRUE FOR TESTING PURPOSES
