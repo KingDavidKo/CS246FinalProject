@@ -213,18 +213,41 @@ void gameController::render() {
     cout << "-----------\t-----------" << endl;
     cout << "Next:      \tNext:      " << endl;
 
-    if (currentPlayer == &playerOne) {
-        cout << "Blocc" << endl;
-    } else {
-        cout << "\t\t\tBlocc"<<endl;
+    char grid[2][4] = {' '};
+    for (auto child : currentPlayer->nextBlock->children) {
+            grid[child->getGridY()-2][child->getGridX()] = child->getLetter();
     }
+    if (currentPlayer == &playerOne) {
+        
+        
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 4; j++) {
+                cout << grid[i][j];
+            }
+            cout << endl;
+        }
+            
+        
+    } else {
+        cout << "\t\t";
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 4; j++) {
+                cout << grid[i][j];
+            }
+            cout << endl;
+            cout << "\t\t";
+        }
+        
+    }
+
+
 
     ///////
     // Print next block here
     ///////
     
     if (!textOnly) {
-        /*
+        
         if (window) {
             for (int i = 0; i <= 18; ++i) {
                 char chr;
@@ -253,12 +276,21 @@ void gameController::render() {
                     } else if (chr == ' ') {
                         color = Xwindow::White; // white
                     }                
-                    window->fillRectangle((col - left) * PIXEL_SIZE, (row - top) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
+                    window->fillRectangle(j * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
-
-                for (int col = left; col <= right; ++col) {
+                for (int j = 0; j <= 11; ++j) {
                     
-                    char chr = subject->getState(row, col);
+                    if (j+1 >= 3 && j+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerOne.grid->isBlind()) {
+                        chr = '?';
+                        
+                        
+                    } else if(!playerTwo.grid->cells[i][j]){ // blank cell
+                        chr = ' ';
+                    }
+                    else{
+                        chr = playerTwo.grid->cells[i][j]->getLetter();
+                    }
+
                     int color = Xwindow::Black; // by default black
 
                     if (chr >= 'a' && chr <= 'z') {
@@ -270,11 +302,11 @@ void gameController::render() {
                     } else if (chr == ' ') {
                         color = Xwindow::White; // white
                     }                
-                    window->fillRectangle((col - left) * PIXEL_SIZE, (row - top) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
+                    window->fillRectangle(j * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
             }
             
-        }*/
+        }
         return;
     }
 }
