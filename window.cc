@@ -31,7 +31,7 @@ Xwindow::Xwindow(int width, int height) : width{width}, height{height} {
   // Set up colors.
   XColor xcolour;
   Colormap cmap;
-  char color_vals[9][20] = {"white", "black", "red", "green", "blue", "yellow", "brown", "turquoise", "purple"};
+  char color_vals[10][20] = {"white", "black", "red", "green", "blue", "yellow", "brown", "turquoise", "purple", "orange"};
 
   cmap = DefaultColormap(d, DefaultScreen(d));
   for (int i = 0; i < 8; ++i) {

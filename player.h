@@ -16,7 +16,7 @@ class Player {
     public:
         unique_ptr<Grid> grid;
         unique_ptr<Level> playerLevel;
-        int score;
+        int hiscore;
         bool blind;
         bool heavy;
         bool force;

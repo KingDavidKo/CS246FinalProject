@@ -20,6 +20,7 @@ class gameController {
     void matchMultiplied(string result, int multiplier);
     string fileParse(string fileName);
     void multipleCommmandHandler(string result);
+    string specialActionHandler(string debuff);
     void levelHeavy(); // helper method to run level heavy check and code
     void specialHeavy(); // helper method to run special action heavy check and code
     vector<string>blocks;

@@ -10,7 +10,7 @@ Player::Player(int playerNum, int level, string filename): playerNum{playerNum},
     if (playerNum == 1) {
         this->nextBlock = playerLevel->generateBlock();
     }
-    this->score = 0;
+    this->hiscore = 0;
     this->blind = false;
     this->heavy = false;
     this->force = false;

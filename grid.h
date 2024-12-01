@@ -81,6 +81,7 @@ class Grid  : public Subject {
 	// accessors and mutators
 	int getLevel();
 	int getScore();
+	void setScore(int newScore);
 	shared_ptr<Block> returnCurrentBlock(); 
 	// void setCurrentBlock(shared_ptr<Block> freshBlock);
 	void addToScore(int s);

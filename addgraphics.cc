@@ -11,7 +11,6 @@ GraphicsObserver::~GraphicsObserver() {
   if (subject) {
     subject->detach(this);  // Detach the observer when it is destroyed
   }
-  delete window;
 }
 
 // Called to display the portion the observer is watching

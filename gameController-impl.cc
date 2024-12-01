@@ -69,9 +69,44 @@ void gameController::run() {
         if (result == "restart") {
             // destroy the boards and remake them!
             // keeps the keybinds intact this way
+            playerOne.grid = make_unique<Grid>();
+            playerOne.grid->setCurrent(currentPlayer->playerLevel->generateBlock());
+            playerOne.grid->setScore(0);
+            playerOne.nextBlock = playerOne.playerLevel->generateBlock();
+
+            playerTwo.grid = make_unique<Grid>();
+            playerTwo.grid->setCurrent(currentPlayer->playerLevel->generateBlock());
+            playerTwo.grid->setScore(0);
         }
         else if (result == "ambiguous" || result == "invalid") {
             cout << result << endl;
+        }
+        else if (result == "drop") {
+            bool specialAction = false;
+            if (currentPlayer->grid->dropBlock(currentPlayer->grid->returnCurrentBlock())) {
+                specialAction = true;
+            }
+            currentPlayer->blind = false;
+            currentPlayer->heavy = false;
+            if (currentPlayer->hiscore < currentPlayer->grid->getScore()) {
+                currentPlayer->hiscore = currentPlayer->grid->getScore();
+            }
+            render();
+            if (specialAction) {
+                cout << "You have triggered a special action! Choose from 3 debuffs: Blind, heavy, or force!" << endl;
+                string debuff;
+                cin >> debuff;
+                string result = specialActionHandler(debuff);
+                while (result == "getDebuff") {
+                    result = specialActionHandler(debuff);
+                }
+            }
+            Player * temp = currentPlayer;
+            currentPlayer = opponent;
+            opponent = temp;
+        
+            opponent->grid->setCurrent(opponent->nextBlock);
+            currentPlayer->nextBlock = currentPlayer->playerLevel->generateBlock();
         }
         render();
     }
@@ -203,9 +238,17 @@ void gameController::multipleCommmandHandler(string result) {
         }// level heavy check and application
         levelHeavy();
     }
-    else if (result == "drop") {
-        // apply drop logic. should be done in a way such that i can continuously call drop a ton of times and nothing happens
-        currentPlayer->grid->dropBlock(currentPlayer->grid->returnCurrentBlock());
+    // else if (result == "drop") {
+    //     // apply drop logic. should be done in a way such that i can continuously call drop a ton of times and nothing happens
+    //     bool specialAction = false;
+    //     if (currentPlayer->grid->dropBlock(currentPlayer->grid->returnCurrentBlock())) {
+    //         specialAction = true;
+    //     }
+    //     currentPlayer->blind = false;
+    //     currentPlayer->heavy = false;
+    //     if (currentPlayer->hiscore < currentPlayer->grid->getScore()) {
+    //         currentPlayer->hiscore = currentPlayer->grid->getScore();
+    //     }
 
         
         /*
@@ -237,14 +280,14 @@ void gameController::multipleCommmandHandler(string result) {
         }*/
 
 
-        Player * temp = currentPlayer;
-        currentPlayer = opponent;
-        opponent = temp;
+    //     Player * temp = currentPlayer;
+    //     currentPlayer = opponent;
+    //     opponent = temp;
         
-        opponent->grid->setCurrent(opponent->nextBlock);
-        currentPlayer->nextBlock = currentPlayer->playerLevel->generateBlock();
+    //     opponent->grid->setCurrent(opponent->nextBlock);
+    //     currentPlayer->nextBlock = currentPlayer->playerLevel->generateBlock();
         
-    }
+    // }
     else if (result == "levelup") {
         // apply levelup
         currentPlayer->incrementLevel();
@@ -260,10 +303,41 @@ void gameController::multipleCommmandHandler(string result) {
     
 }
 
+string gameController::specialActionHandler(string debuff) {
+    string result = commandMatch(debuff);
+    if (result != "blind" && result != "heavy" && result != "force") {
+        cout << "Choose one of the three debuffs!" << endl;
+        return "getDebuff";
+    }
+    else {
+        if (result == "blind") {
+            opponent->grid->setBlind(true);
+        }
+        else if (result == "heavy") {
+            // apply heavy modifier here
+            opponent->grid->setHeavy(true);
+        }
+        else if (result == "force") {
+        //     if (readingFromFile) {
+        //         return result;
+        //     }
+        // else {
+            string block;
+            cin >> block;
+            if (isABlock(block)) { // reprompt maybe if it's not  a block
+                //opponent->setCurrentBlock(block); 
+                // What is lost??
+                // if (opponent->lost()) {
+                //     return "WON";
+                // }
+            }
+        }
+    }
+    return "";
+}
 
 void gameController::render() {
-    //cout << "Level:\t" << playerOne.returnLevel() << "\t" << "Level:\t" << playerTwo.returnLevel() << endl;
-    
+    cout << "HiScore:" << playerOne.hiscore << "\t" << "HiScore:" << playerTwo.hiscore << endl;
     cout << "Level:\t" << playerOne.grid->getLevel() << "\t" << "Level:\t" << playerTwo.grid->getLevel() << endl;
     cout << "Score:\t" << playerOne.grid->getScore() << "\t" << "Score:\t" << playerTwo.grid->getScore() << endl;
     
@@ -333,14 +407,10 @@ void gameController::render() {
         }
         
     }
-
-
-
     ///////
     // Print next block here
     ///////
-    
-    if (!textOnly) {
+   if (!textOnly) {
         if (window) {
             for (int i = 0; i < 18; ++i) {
                 char chr;
@@ -369,38 +439,40 @@ void gameController::render() {
                     } else if (chr == 'Z') {
                         color = Xwindow::Red;   // red
                     } else if (chr == 'I') {
-                        color = Xwindow::Turquoise;   // red
+                        color = Xwindow::Turquoise;   
                     } else if (chr == 'O') {
-                        color = Xwindow::Turquoise;   // red
-                    } else if (chr == '*') {
-                        color = Xwindow::Brown;   // red
+                        color = Xwindow::Yellow;   
+                    }
+                    else if (chr == 'T') {
+                        color = Xwindow::Purple;
+                    }
+                    else if (chr == 'L') {
+                        color = Xwindow::Orange;
+                    }
+                    else if (chr == '*') {
+                        color = Xwindow::Brown;   
                     } 
                     else{
-                        color = Xwindow::Black;   // red
+                        color = Xwindow::Black;   
                     }                      
                     window->fillRectangle(j * PIXEL_SIZE, (i+2) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
-                window->drawString(5, 0 * PIXEL_SIZE+ 10, "Level: " + to_string(playerOne.returnLevel()));
-                window->drawString(window->getWidth()/2 + 5, 0 * PIXEL_SIZE + 10, "Level: " + to_string(playerTwo.score));
-                window->drawString(5, 1 * PIXEL_SIZE + 10, "Score: " + to_string(playerOne.score));
-                window->drawString(window->getWidth()/2 + 5, 1 * PIXEL_SIZE + 10, "Score: " + to_string(playerTwo.score));
+                window->drawString(5, 0 * PIXEL_SIZE+ 10, "HiScore:" + to_string(playerOne.hiscore));
+                window->drawString(window->getWidth()/2 + 5, 0 * PIXEL_SIZE + 10, "HiScore:" + to_string(playerTwo.hiscore));
+                window->drawString(5, 1 * PIXEL_SIZE+ 10, "Level: " + to_string(playerOne.returnLevel()));
+                window->drawString(window->getWidth()/2 + 5, 1 * PIXEL_SIZE + 10, "Level: " + to_string(playerTwo.returnLevel()));
+                window->drawString(5, 2 * PIXEL_SIZE + 10, "Score: " + to_string(playerOne.grid->getScore()));
+                window->drawString(window->getWidth()/2 + 5, 2 * PIXEL_SIZE + 10, "Score: " + to_string(playerTwo.grid->getScore()));
                 for (int j = 0; j < 11; ++j) {
-                    
                     if (i+1 >= 3 && i+1 <= 12 && j+1 >= 3 && j+1 <= 9 && playerTwo.grid->isBlind()) {
                         chr = '?';
-                        
-                        
                     } else if(!playerTwo.grid->cells[i][j]){ // blank cell
                         chr = ' ';
                     }
                     else{
                         chr = playerTwo.grid->cells[i][j]->getLetter();
                     }
-
                     int color = Xwindow::Black; // by default black
-
-                     
-
                     if (chr == 'S') {
                         color = Xwindow::Green; // green
                     } else if (chr == 'J') {
@@ -410,15 +482,23 @@ void gameController::render() {
                     } else if (chr == 'Z') {
                         color = Xwindow::Red;   // red
                     } else if (chr == 'I') {
-                        color = Xwindow::Turquoise;   // red
+                        color = Xwindow::Turquoise;   
                     } else if (chr == 'O') {
-                        color = Xwindow::Turquoise;   // red
-                    } else if (chr == '*') {
-                        color = Xwindow::Brown;   // red
+                        color = Xwindow::Yellow;   
+                    }
+                    else if (chr == 'T') {
+                        color = Xwindow::Purple;
+                    }
+                    else if (chr == 'L') {
+                        color = Xwindow::Orange;
+                    }
+                    else if (chr == '*') {
+                        color = Xwindow::Brown;   
                     } 
                     else{
-                        color = Xwindow::Black;   // red
-                    }         
+                        color = Xwindow::Black;   
+                    }                   
+                         
                     window->fillRectangle((GRAPHIC_COL_SIZE + j) * PIXEL_SIZE, (i+2) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color); // update window
                 }
                 //window->drawString(0, 18 * PIXEL_SIZE, "-----------\t-----------"); // update window
@@ -430,20 +510,12 @@ void gameController::render() {
         for (auto child : currentPlayer->nextBlock->getCells()) {
                 grid[child->getGridY()-2][child->getGridX()] = child->getLetter();
         }
-    
-        if (currentPlayer == &playerOne) { // we can also check playerNum here
-            
-                
-            
+          if (currentPlayer == &playerOne) { // we can also check playerNum here
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 4; j++) {
                     chr = grid[i][j];
-                
                     //char chr = playerOne->getState(row, col);
                     int color = Xwindow::Black; // by default black
-
-                     
-
                     if (chr == 'S') {
                         color = Xwindow::Green; // green
                     } else if (chr == 'J') {
@@ -453,31 +525,31 @@ void gameController::render() {
                     } else if (chr == 'Z') {
                         color = Xwindow::Red;   // red
                     } else if (chr == 'I') {
-                        color = Xwindow::Turquoise;   // red
+                        color = Xwindow::Turquoise;   
                     } else if (chr == 'O') {
-                        color = Xwindow::Turquoise;   // red
-                    } else if (chr == '*') {
-                        color = Xwindow::Brown;   // red
+                        color = Xwindow::Yellow;   
+                    }
+                    else if (chr == 'T') {
+                        color = Xwindow::Purple;
+                    }
+                    else if (chr == 'L') {
+                        color = Xwindow::Orange;
+                    }
+                    else if (chr == '*') {
+                        color = Xwindow::Brown;   
                     } 
                     else{
-                        color = Xwindow::Black;   // red
-                    }                    
+                        color = Xwindow::Black;   
+                    }                   
                     window->fillRectangle(j * PIXEL_SIZE, (23 +i) * PIXEL_SIZE + 2, PIXEL_SIZE, PIXEL_SIZE, color);
                 }
             }
-                
-            
         } else {
-            
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 4; j++) {
                     chr = grid[i][j];
-                
                     //char chr = playerOne->getState(row, col);
                     int color = Xwindow::Black; // by default black
-
-                     
-
                     if (chr == 'S') {
                         color = Xwindow::Green; // green
                     } else if (chr == 'J') {
@@ -487,25 +559,29 @@ void gameController::render() {
                     } else if (chr == 'Z') {
                         color = Xwindow::Red;   // red
                     } else if (chr == 'I') {
-                        color = Xwindow::Turquoise;   // red
+                        color = Xwindow::Turquoise;   
                     } else if (chr == 'O') {
-                        color = Xwindow::Turquoise;   // red
-                    } else if (chr == '*') {
-                        color = Xwindow::Brown;   // red
+                        color = Xwindow::Yellow;   
+                    }
+                    else if (chr == 'T') {
+                        color = Xwindow::Purple;
+                    }
+                    else if (chr == 'L') {
+                        color = Xwindow::Orange;
+                    }
+                    else if (chr == '*') {
+                        color = Xwindow::Brown;   
                     } 
                     else{
-                        color = Xwindow::Black;   // red
-                    }             
+                        color = Xwindow::Black;   
+                    }                   
                     window->fillRectangle(j * PIXEL_SIZE + window->getWidth()/2 + 5, (23 +i) * PIXEL_SIZE + 2, PIXEL_SIZE, PIXEL_SIZE, color);
                 }
             }
-            
-        }
-                    
-                }
-                
+        }      
+                }  
             }
-    }
+     }
     return;
 }
 
@@ -521,6 +597,33 @@ string gameController::fileParse(string fileName) {
         }
         else if (result == "ambiguous" || result == "invalid") {
             cout << result << endl;
+        }
+        else if (result == "drop") {
+            bool specialAction = false;
+            if (currentPlayer->grid->dropBlock(currentPlayer->grid->returnCurrentBlock())) {
+                specialAction = true;
+            }
+            currentPlayer->grid->setBlind(false);
+            currentPlayer->grid->setHeavy(false);
+            if (currentPlayer->hiscore < currentPlayer->grid->getScore()) {
+                currentPlayer->hiscore = currentPlayer->grid->getScore();
+            }
+            render();
+            if (specialAction) {
+                cout << "You have triggered a special action! Choose from 3 debuffs: Blind, heavy, or force!" << endl;
+                string debuff;
+                cin >> debuff;
+                string result = specialActionHandler(debuff);
+                while (result == "getDebuff") {
+                    result = specialActionHandler(debuff);
+                }
+            }
+            Player * temp = currentPlayer;
+            currentPlayer = opponent;
+            opponent = temp;
+        
+            opponent->grid->setCurrent(opponent->nextBlock);
+            currentPlayer->nextBlock = currentPlayer->playerLevel->generateBlock();
         }
         else if (result == "return") {
             return result;
@@ -547,6 +650,7 @@ string gameController::fileParse(string fileName) {
             currentPlayer->level->setFile(seqFile); // set File does not exist at this moment!
             */
         }
+        
         else if (result == "force") {
             /*
             string block;
@@ -577,7 +681,7 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
     input >> potentialCommand;
     string result = commandMatch(potentialCommand);
     // maybe return result right here
-    if (result == "restart" || result == "ambiguous" || result == "invalid")  {
+    if (result == "restart" || result == "ambiguous" || result == "invalid" || result == "drop")  {
         return result; // wait if we restart the game all keybinds would be gone? 
     }
     // else if (result == "hint") {
@@ -631,27 +735,14 @@ string gameController::decipherCommand(string toInterpret, bool readingFromFile)
         // ^^ Guaranteed Memory Leak
     }
     else if (result == "blind") {
-        //opponent->grid->blind();
-        // ^^ Doesn't exist yet
+        cout << "You have not triggered special action yet!" << endl;
     }
     else if (result == "heavy") {
-        // apply heavy modifier here
+        cout << "You have not triggered special action yet!" << endl;
     }
     else if (result == "force") {
-        if (readingFromFile) {
-            return result;
-        }
-        else {
-            string block;
-            cin >> block;
-            if (isABlock(block)) { // reprompt maybe if it's not  a block
-                //opponent->setCurrentBlock(block); 
-                // What is lost??
-                // if (opponent->lost()) {
-                //     return "WON";
-                // }
-            }
-        }
+        cout << "You have not triggered special action yet!" << endl;
+
     }
     else {
         matchMultiplied(result, multiplier); // handles all multiplied stuff

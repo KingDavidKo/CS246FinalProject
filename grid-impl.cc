@@ -456,6 +456,11 @@ int Grid::getLevel() { return level; }
 
 int Grid::getScore() { return score; }
 
+void Grid::setScore(int newScore) { 
+	score = newScore; 
+	return;
+}
+
 void Grid::addToScore(int s){
 	score += s;
 
